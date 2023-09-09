@@ -233,6 +233,7 @@ char			*get_env_value(char *env_name, char **envp);
 void			print_env(t_utils_hold *utils_hold, int *i);
 int				check_redirections(t_simple_cmds *cmd, t_utils_hold *utils_hold	);
 void			clean_exit(t_utils_hold *utils_hold, int exit_code);
+
 /*
 " | " = 1
 " > " =  2

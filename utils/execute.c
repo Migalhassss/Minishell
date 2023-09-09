@@ -70,10 +70,12 @@ void	single_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 	exit_cmd = take_command_to_check(utils_hold->args);
 	status = 0;
 	send_heredoc(utils_hold, cmd);
-	if (!ft_strcmp(exit_cmd, "exit"))
+	if (!ft_strcmp(exit_cmd, "exit") || !ft_strcmp(exit_cmd, "cd")
+		|| !ft_strcmp(exit_cmd, "export") || !ft_strcmp(exit_cmd, "unset"))
 	{
-		free(exit_cmd);
 		which_command(utils_hold);
+		free(exit_cmd);
+		return ;
 	}
 	free(exit_cmd);
 	pid = fork();

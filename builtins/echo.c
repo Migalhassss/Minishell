@@ -134,19 +134,19 @@ void	ft_make_invisible_2(t_utils_hold *utils_hold, int *i)
 	}
 }
 
-void	ft_make_expand_error(t_utils_hold *utils_hold, int *i)
-{
-	char	*exit_str;
+// void	ft_make_expand_error(t_utils_hold *utils_hold, int *i)
+// {
+// 	char	*exit_str;
 
-	if (utils_hold->args[*i] == '$' && utils_hold->args[*i + 1] == '?')
-	{
-		exit_str = ft_itoa(g_global.exit_code);
-		(*i)++;
-		ft_putstr_fd(exit_str, 1);
-		free(exit_str);
-		g_global.exit_code = 0;
-	}
-}
+// 	if (utils_hold->args[*i] == '$' && utils_hold->args[*i + 1] == '?')
+// 	{
+// 		exit_str = ft_itoa(g_global.exit_code);
+// 		(*i)++;
+// 		ft_putstr_fd(exit_str, 1);
+// 		free(exit_str);
+// 		g_global.exit_code = 0;
+// 	}
+// }
 
 void	ft_make_dollar(t_utils_hold *utils_hold, int *i, int flag)
 {
@@ -159,8 +159,6 @@ void	ft_make_dollar(t_utils_hold *utils_hold, int *i, int flag)
 		(*i)++;
 	else if (utils_hold->args[*i] == '$' && utils_hold->args[*i + 1] == '\0')
 		ft_putchar_fd('$', 1);
-	else if (utils_hold->args[*i] == '$' && utils_hold->args[*i + 1] == '?')
-		ft_make_expand_error(utils_hold, i);
 	else if (utils_hold->args[*i] == '$' && utils_hold->args[*i + 1] != ' ')
 		print_env(utils_hold, i);
 	else

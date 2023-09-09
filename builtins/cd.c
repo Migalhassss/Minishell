@@ -56,7 +56,9 @@ int	cd_home(t_utils_hold *utils_hold)
 		if (ft_strcharcmp2(utils_hold->envp[i], "HOME=", '='))
 		{
 			home = ft_strdup(utils_hold->envp[i] + 5);
+			free(utils_hold->old_pwd);
 			utils_hold->old_pwd = ft_strdup(utils_hold->pwd);
+			free(utils_hold->pwd);
 			utils_hold->pwd = ft_strdup(home);
 			update_pwd(utils_hold);
 			if (chdir(home) == -1)
@@ -71,6 +73,7 @@ int	cd_home(t_utils_hold *utils_hold)
 
 int	cd_path(t_utils_hold *utils_hold)
 {
+	free(utils_hold->old_pwd);
 	utils_hold->old_pwd = ft_strdup(utils_hold->pwd);
 	if (chdir(utils_hold->args) == -1)
 	{
@@ -79,6 +82,7 @@ int	cd_path(t_utils_hold *utils_hold)
 		ft_putstr_fd(": No such file or directory\n", 2);
 		return (-1);
 	}
+	free(utils_hold->pwd);
 	utils_hold->pwd = getcwd(NULL, 0);
 	update_pwd(utils_hold);
 	return (0);
@@ -96,7 +100,9 @@ int	cd_minus(t_utils_hold *utils_hold)
 	else
 	{
 		tmp = ft_strdup(utils_hold->old_pwd);
+		free(utils_hold->old_pwd);
 		utils_hold->old_pwd = ft_strdup(utils_hold->pwd);
+		free(utils_hold->pwd);
 		utils_hold->pwd = ft_strdup(tmp);
 		free(tmp);
 		if (chdir(utils_hold->pwd) == -1)
@@ -106,6 +112,7 @@ int	cd_minus(t_utils_hold *utils_hold)
 			ft_putstr_fd(": No such file or directory\n", 2);
 			return (-1);
 		}
+		free(utils_hold->pwd);
 		utils_hold->pwd = getcwd(NULL, 0);
 		update_pwd(utils_hold);
 	}
@@ -123,7 +130,9 @@ int	cd_dotdot(t_utils_hold *utils_hold)
 	while (utils_hold->pwd[i] != '/' && i > 1)
 		i--;
 	tmp = ft_substr(utils_hold->pwd, 0, i);
+	free(utils_hold->old_pwd);
 	utils_hold->old_pwd = ft_strdup(utils_hold->pwd);
+	free(utils_hold->pwd);	
 	utils_hold->pwd = ft_strdup(tmp);
 	free(tmp);
 	update_pwd(utils_hold);
@@ -147,6 +156,7 @@ int	check_n_args(t_utils_hold *utils_hold)
 	hold_args = ft_split(utils_hold->args, ' ');
 	while (hold_args[i] != NULL)
 		i++;
+	free_array(hold_args);
 	if (i > 1)
 		return (-1);
 	return (0);

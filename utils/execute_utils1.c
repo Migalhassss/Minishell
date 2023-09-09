@@ -187,7 +187,6 @@ void	clean_exit(t_utils_hold *utils_hold, int exit_code)
 	free(utils_hold->args);
 	free(utils_hold->pwd);
 	free(utils_hold->old_pwd);
-	free_array(utils_hold->envp);
 	free_array(utils_hold->paths);
 	rl_clear_history();
 	free(utils_hold->simple_cmds);
@@ -199,16 +198,8 @@ void	clean_exit(t_utils_hold *utils_hold, int exit_code)
 void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 {
 	int	exit_code;
-	char	*exit_cmd;
 
 	exit_code = 0;
-	exit_cmd = take_command_to_check(utils_hold->args);
-	if (!ft_strcmp(exit_cmd, "exit"))
-	{
-		free(exit_cmd);
-		which_command(utils_hold);
-	}
-	free(exit_cmd);
 	if (cmd->redirections)
 	{
 		if (check_redirections(cmd, utils_hold))
@@ -217,12 +208,16 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 			perror("error\n");
 		}
 	}
-	if (check_builtins(utils_hold) == 1)
+	if (cmd->str[0][0] != '\0' && check_builtins(utils_hold) == 1)
 	{
 		which_command(utils_hold);
-		return ;
+		if (cmd->str)
+			free_array(cmd->str);
 	}
-	if (cmd->str[0][0] != '\0')
+	else if (cmd->str[0][0] != '\0')
+	{
 		exit_code = find_cmd(cmd, utils_hold);
+		free_array(utils_hold->envp);
+	}
 	clean_exit(utils_hold, exit_code);
 }

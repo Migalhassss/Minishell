@@ -107,6 +107,12 @@ char	*exit_code(t_utils_hold *utils_hold)
 	flag = 0;
 	while (utils_hold->args[i])
 	{
+		if (utils_hold->args[i] == '\'')
+		{
+			i++;
+			while (utils_hold->args[i] != '\'' && utils_hold->args[i])
+				i++;
+		}
 		if (utils_hold->args[i] == '$' && utils_hold->args[i + 1] == '?')
 		{
 			flag = i;
@@ -129,11 +135,14 @@ char	*check_if_is_first(t_utils_hold *utils_hold)
 	char	*exit_code;
 
 	exit_code = NULL;
+	tmp = NULL;
 	if (utils_hold->args[0] == '$' && utils_hold->args[1] == '?')
 	{
 		exit_code = ft_itoa(g_global.exit_code);
 		tmp = ft_strjoin(exit_code, utils_hold->args + 2);
 	}
+	else
+		return (utils_hold->args);
 	free(utils_hold->args);
 	free(exit_code);
 	utils_hold->args = ft_strdup(tmp);
@@ -150,6 +159,13 @@ void	transfer(t_utils_hold *utils_hold)
 	flag = 0;
 	while (utils_hold->args[i])
 	{
+		if (utils_hold->args[i] == '\'')
+		{
+			if (utils_hold->args[i + 1])
+				i++;
+			while (utils_hold->args[i] != '\'' && utils_hold->args[i])
+	 			i++;
+		}
 		if (utils_hold->args[i] == '$' && utils_hold->args[i + 1] == '?')
 			flag = 1;
 		i++;
@@ -160,6 +176,12 @@ void	transfer(t_utils_hold *utils_hold)
 	utils_hold->args = check_if_is_first(utils_hold);
 	while (utils_hold->args[i])
 	{
+		if (utils_hold->args[i] == '\'')
+		{
+			i++;
+			while (utils_hold->args[i] != '\'' && utils_hold->args[i])
+				i++;
+		}
 		if (utils_hold->args[i] == '$' && utils_hold->args[i + 1] == '?')
 		{
 			utils_hold->args = exit_code(utils_hold);
@@ -177,6 +199,7 @@ int	minishell_loop(t_utils_hold *utils_hold)
 	tmp = ft_strtrim(utils_hold->args, " ");
 	free(utils_hold->args);
 	utils_hold->args = tmp;
+	printf("%s\n", utils_hold->args);
 	if (!utils_hold->args)
 	{
 		ft_putendl_fd("exit", STDOUT_FILENO);
@@ -186,13 +209,12 @@ int	minishell_loop(t_utils_hold *utils_hold)
 		reset_utils_hold(utils_hold);
 	add_history(utils_hold->args);
 	transfer(utils_hold);
-	printf("%s\n", utils_hold->args);
 	if (count_quotes(utils_hold->args) == 0)
 		return (ft_error(2, utils_hold));
 	if (token_reader(utils_hold) == 0)
 		return (ft_error(1, utils_hold));
 	parser(utils_hold);
-	print_list(utils_hold->lexer_list);
+	// print_list(utils_hold->lexer_list);
 	prepare_executor(utils_hold);
 	reset_utils_hold(utils_hold);
 	return (1);

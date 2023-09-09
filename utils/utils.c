@@ -78,8 +78,10 @@ void	free_array(char **split_array)
 	i = 0;
 	while (split_array[i])
 	{
-		free(split_array[i]);
+		if (split_array[i])
+			free(split_array[i]);
 		i++;
 	}
-	free(split_array);
+	if (split_array)
+		free(split_array);
 }
