@@ -217,7 +217,7 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 	else if (cmd->str[0][0] != '\0')
 	{
 		exit_code = find_cmd(cmd, utils_hold);
-		free_array(utils_hold->envp);
 	}
+	free_array(utils_hold->envp);
 	clean_exit(utils_hold, exit_code);
 }

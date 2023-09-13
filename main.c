@@ -34,7 +34,7 @@ int	main(int ac, char **av, char **envp)
 	}
 	signal(SIGINT, sigint_handler);
 	utils.envp = ft_envpdup(envp);
-	pwd_find(&utils);	
+	pwd_find(&utils);
 	implement_utils_hold(&utils);
 	// printf("\n%s\n\n", "Welcome to minishell!");
 	g_global.exit_code = 0;

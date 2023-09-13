@@ -14,14 +14,12 @@
 
 char	*ft_strdup_2(const char *src)
 {
-	char	*ptr;
 	char	*dest;
 	int		i;
 	int		len;
 
 	len = 0;
 	i = 0;
-	ptr = NULL;
 	dest = NULL;
 	while (src[i] != '\0')
 	{
@@ -30,9 +28,9 @@ char	*ft_strdup_2(const char *src)
 		i++;
 	}
 	dest = (char *)malloc(len * sizeof(char) + 1);
-	ptr = dest;
-	if (!ptr)
+	if (!dest)
 		return (0);
+	i = 0;
 	while (src[i] != '\0')
 	{
 		if (src[i] != '"' && src[i] != '\'')

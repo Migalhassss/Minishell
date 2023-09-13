@@ -150,30 +150,81 @@ char	*check_if_is_first(t_utils_hold *utils_hold)
 	return (utils_hold->args);
 }
 
-void	transfer(t_utils_hold *utils_hold)
+void	put_in_args(t_utils_hold *utils_hold, char *env_value, int i)
 {
-	int	i;
-	int	flag;
+	char	*tmp2;
+	char	*tmp3;
+
+
+	tmp2 = ft_substr(env_value, 0, ft_strlen(env_value));
+	free(env_value);
+	tmp3 = ft_strjoin(tmp2, utils_hold->args + i);
+	free(tmp2);
+	free(utils_hold->args);
+	utils_hold->args = tmp3;
+}
+
+void	transfer2(t_utils_hold *utils_hold, int *i)
+{
+	int		j;
+	char	*tmp;
+	char	*env_value;
+
+	if (utils_hold->args[*i + 1] == '?')
+	{
+		tmp = ft_itoa(g_global.exit_code);
+		put_in_args(utils_hold, tmp, *i);
+		free(tmp);
+		return ;
+	}
+	j = *i + 1;
+	while (utils_hold->args[*i] && utils_hold->args[*i] != ' '
+		&& utils_hold->args[*i] != '\'' && utils_hold->args[*i] != '"')
+		(*i)++;
+	tmp = ft_substr(utils_hold->args, j, *i - 1);
+	env_value = get_env_value(tmp, utils_hold->envp);
+	free(tmp);
+	put_in_args(utils_hold, env_value, *i);
+}
+
+void	clean_args(t_utils_hold *utils_hold, char *cmd, int flag)
+{
+	char	*tmp;
+	char	*tmp2;
+
+	if (flag == 1)
+	{
+		tmp = ft_strjoin(cmd, " ");
+		free(cmd);
+		tmp2 = ft_strjoin(tmp, utils_hold->args);
+		free(utils_hold->args);
+		free(tmp);
+		utils_hold->args = tmp2;
+	}
+	else
+		free(cmd);
+}
+
+void	 check_user2(t_utils_hold *utils_hold, int *i)
+{	
+	if (!ft_strncmp(utils_hold->args + *i, "'$USER'", 7))
+		put_in_args(utils_hold, get_env_value(utils_hold->args + *i, utils_hold->envp), *i);
+	else if (!ft_strncmp(utils_hold->args + *i, "\'\"$USER\"\'", 9))
+	{
+		put_in_args(utils_hold, "\"$USER\"", *i);
+		*i += 8;
+	}
+}
+
+void	envp_value(t_utils_hold *utils_hold)
+{
+	int		i;
+	int		flag;
+	char	*cmd;
 
 	i = 0;
 	flag = 0;
-	while (utils_hold->args[i])
-	{
-		if (utils_hold->args[i] == '\'')
-		{
-			if (utils_hold->args[i + 1])
-				i++;
-			while (utils_hold->args[i] != '\'' && utils_hold->args[i])
-	 			i++;
-		}
-		if (utils_hold->args[i] == '$' && utils_hold->args[i + 1] == '?')
-			flag = 1;
-		i++;
-	}
-	if (flag == 0)
-		return ;
-	i = 0;
-	utils_hold->args = check_if_is_first(utils_hold);
+	cmd = take_command_to_check(utils_hold->args);
 	while (utils_hold->args[i])
 	{
 		if (utils_hold->args[i] == '\'')
@@ -182,13 +233,16 @@ void	transfer(t_utils_hold *utils_hold)
 			while (utils_hold->args[i] != '\'' && utils_hold->args[i])
 				i++;
 		}
-		if (utils_hold->args[i] == '$' && utils_hold->args[i + 1] == '?')
+		if (utils_hold->args[i] == '$')
 		{
-			utils_hold->args = exit_code(utils_hold);
-			i = 0;
+			flag = 1;
+			transfer2(utils_hold, &i);
 		}
+		if (utils_hold->args[i] == '"')
+			check_user2(utils_hold, &i);
 		i++;
 	}
+	clean_args(utils_hold, cmd, flag);
 }
 
 int	minishell_loop(t_utils_hold *utils_hold)
@@ -199,7 +253,6 @@ int	minishell_loop(t_utils_hold *utils_hold)
 	tmp = ft_strtrim(utils_hold->args, " ");
 	free(utils_hold->args);
 	utils_hold->args = tmp;
-	printf("%s\n", utils_hold->args);
 	if (!utils_hold->args)
 	{
 		ft_putendl_fd("exit", STDOUT_FILENO);
@@ -208,13 +261,12 @@ int	minishell_loop(t_utils_hold *utils_hold)
 	if (ft_strlen(utils_hold->args) == 0)
 		reset_utils_hold(utils_hold);
 	add_history(utils_hold->args);
-	transfer(utils_hold);
-	if (count_quotes(utils_hold->args) == 0)
+	if (count_quotes(utils_hold->args) == 1)
 		return (ft_error(2, utils_hold));
+	envp_value(utils_hold);
 	if (token_reader(utils_hold) == 0)
 		return (ft_error(1, utils_hold));
 	parser(utils_hold);
-	// print_list(utils_hold->lexer_list);
 	prepare_executor(utils_hold);
 	reset_utils_hold(utils_hold);
 	return (1);

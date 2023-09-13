@@ -16,6 +16,8 @@ int	find_matching_quote(char *line, int i, int *num_del, int del)
 {
 	int	j;
 
+	if (!line[i] || !line[i + 1])
+		return (-1);
 	j = i + 1;
 	*num_del += 1;
 	while (line[j] && line[j] != del)
@@ -25,25 +27,68 @@ int	find_matching_quote(char *line, int i, int *num_del, int del)
 	return (j - i);
 }
 
-int	count_quotes(char *line)
+int	any_quote(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == 34 || line[i] == 39)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	single_quote(char *line)
 {
 	int	i;
 	int	s;
+
+	i = 0;
+	s = 0;
+	while (line[i])
+	{
+		if (line[i] == 39)
+			s++;
+		i++;
+	}
+	if (s % 2 != 0)
+		return (1);
+	return (0);
+}
+
+int	double_quote(char *line)
+{
+	int	i;
 	int	d;
 
-	s = 0;
+	i = 0;
 	d = 0;
-	i = -1;
-	while (line[++i])
+	while (line[i])
 	{
-		if (line[i] == 34)
-			i += find_matching_quote(line, i, &d, 34);
 		if (line[i] == 39)
-			i += find_matching_quote(line, i, &s, 39);
+			while (line[i] != 39 && line[i])
+				i++;
+		if (!line[i])
+			break;
+		if (line[i] == 34)
+			d++;
+		i++;
 	}
-	if ((d > 0 && d % 2 != 0) || (s > 0 && s % 2 != 0))
+	if (d % 2 != 0)
+		return (1);
+	return (0);
+}
+
+int		count_quotes(char *line)
+{
+	if (any_quote(line) == 0)
 		return (0);
-	return (1);
+	if (single_quote(line) == 1 || double_quote(line) == 1)
+		return (1);
+	return (0);
 }
 
 char	**ft_envpdup(char **envp)
