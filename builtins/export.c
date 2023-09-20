@@ -179,28 +179,28 @@ void	add_envp(char *hold_args, t_utils_hold *utils_hold, int arrlen)
 	return ;
 }
 
-	int	ft_export(t_utils_hold *utils_hold)
-	{
-		char	**hold_args;
-		int		i;
+int	ft_export(t_utils_hold *utils_hold)
+{
+	char	**hold_args;
+	int		i;
 
-		i = 0;
-		if (utils_hold->args[0] == '\0')
-			return (1);
-		hold_args = ft_split(utils_hold->args, ' '); 
-		if (check_args(hold_args) == -1)
-		{
-			free_array(hold_args);
-			return (1);
-		}
-		while (hold_args[i])
-		{
-			if (check_if_exists_helper(hold_args[i], utils_hold) == 1)
-				update_envp(hold_args[i], utils_hold);
-			else
-				add_envp(hold_args[i], utils_hold, ft_arrlen(hold_args));
-			i++;
-		}
+	i = 0;
+	if (utils_hold->args[0] == '\0')
+		return (1);
+	hold_args = ft_split(utils_hold->args, ' '); 
+	if (check_args(hold_args) == -1)
+	{
 		free_array(hold_args);
-		return (0);
+		return (1);
 	}
+	while (hold_args[i])
+	{
+		if (check_if_exists_helper(hold_args[i], utils_hold) == 1)
+			update_envp(hold_args[i], utils_hold);
+		else
+			add_envp(hold_args[i], utils_hold, ft_arrlen(hold_args));
+		i++;
+	}
+	free_array(hold_args);
+	return (0);
+}

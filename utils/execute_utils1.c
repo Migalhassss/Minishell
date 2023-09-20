@@ -151,49 +151,58 @@ void	better_args(t_utils_hold *utils_hold)
 
 void	free_tmp(t_utils_hold *utils_tmp)
 {
-	free(utils_tmp->lexer_list->str);
-	free(utils_tmp->lexer_list);
+	int i = 0;
+
+	while (utils_tmp->lexer_list->str)
+	{
+		i++;
+		utils_tmp->lexer_list = utils_tmp->lexer_list->next;
+	}
 	free(utils_tmp->args);
+	free(utils_tmp->lexer_list);
 }
 
 int	check_redirections(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 {
 	t_lexer	*start;
+	t_lexer	*tmp;
 	t_utils_hold	utils_tmp;
 
 	utils_tmp.args = ft_strdup(utils_hold->args);
 	token_reader(&utils_tmp);
 	better_args(utils_hold);
 	start = cmd->redirections;
+	tmp = utils_tmp.lexer_list;
 	while (cmd->redirections)
 	{
 		if (cmd->redirections->token == 3)
 		{
-			while (utils_tmp.lexer_list->token != 3)
-				utils_tmp.lexer_list = utils_tmp.lexer_list->next;
-			if (handle_infile(utils_tmp.lexer_list->next->str))
+			while (tmp->token != 3)
+				tmp = tmp->next;
+			if (handle_infile(tmp->next->str))
 				return (1);
 		}
 		else if (cmd->redirections->token == 2
 			|| cmd->redirections->token == 4)
 		{
-			while (utils_tmp.lexer_list->token != 2
-				&& utils_tmp.lexer_list->token != 4)
-				utils_tmp.lexer_list = utils_tmp.lexer_list->next;
-			if (handle_outfile(cmd->redirections, utils_tmp.lexer_list->next->str))
+			while (tmp->token != 2
+				&& tmp->token != 4)
+				tmp = tmp->next;
+			if (handle_outfile(cmd->redirections, tmp->next->str))
 				return (1);
 		}
 		else if (cmd->redirections->token == 5)
 		{
-			while (utils_tmp.lexer_list->token != 5)
-				utils_tmp.lexer_list = utils_tmp.lexer_list->next;
-			if (handle_infile(utils_tmp.lexer_list->next->str))
+			while (tmp->token != 5)
+				tmp = tmp->next;
+			if (handle_infile(tmp->next->str))
 				return (1);
 		}
 		cmd->redirections = cmd->redirections->next;
 	}
-	cmd->redirections = start;
+	
 	free_tmp(&utils_tmp);
+	cmd->redirections = start;
 	return (0);
 }
 
