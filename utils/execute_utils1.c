@@ -123,19 +123,47 @@ int	handle_outfile(t_lexer *redirection, char *file)
 	return (EXIT_SUCCESS);
 }
 
+
+void	better_args(t_utils_hold *utils_hold)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (utils_hold->args[i])
+	{
+		if (utils_hold->args[i] == '<' || utils_hold->args[i] == '>')
+		{
+			tmp = ft_substr(utils_hold->args, 0, i);
+			free(utils_hold->args);
+			utils_hold->args = ft_strdup(tmp);
+			free(tmp);
+			tmp = ft_strtrim(utils_hold->args, " ");
+			free(utils_hold->args);
+			utils_hold->args = ft_strdup(tmp);
+			free(tmp);
+			return ;
+		}
+		i++;
+	}
+	return ;
+}
+
 void	free_tmp(t_utils_hold *utils_tmp)
 {
+	free(utils_tmp->lexer_list->str);
+	free(utils_tmp->lexer_list);
 	free(utils_tmp->args);
 }
 
-int	check_redirections(t_simple_cmds *cmd, t_utils_hold *utils_hold	)
+int	check_redirections(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 {
 	t_lexer	*start;
 	t_utils_hold	utils_tmp;
 
 	utils_tmp.args = ft_strdup(utils_hold->args);
 	token_reader(&utils_tmp);
-	
+	better_args(utils_hold);
 	start = cmd->redirections;
 	while (cmd->redirections)
 	{
@@ -144,7 +172,7 @@ int	check_redirections(t_simple_cmds *cmd, t_utils_hold *utils_hold	)
 			while (utils_tmp.lexer_list->token != 3)
 				utils_tmp.lexer_list = utils_tmp.lexer_list->next;
 			if (handle_infile(utils_tmp.lexer_list->next->str))
-				return (EXIT_FAILURE);
+				return (1);
 		}
 		else if (cmd->redirections->token == 2
 			|| cmd->redirections->token == 4)
@@ -153,19 +181,20 @@ int	check_redirections(t_simple_cmds *cmd, t_utils_hold *utils_hold	)
 				&& utils_tmp.lexer_list->token != 4)
 				utils_tmp.lexer_list = utils_tmp.lexer_list->next;
 			if (handle_outfile(cmd->redirections, utils_tmp.lexer_list->next->str))
-				return (EXIT_FAILURE);
+				return (1);
 		}
 		else if (cmd->redirections->token == 5)
 		{
 			while (utils_tmp.lexer_list->token != 5)
 				utils_tmp.lexer_list = utils_tmp.lexer_list->next;
 			if (handle_infile(utils_tmp.lexer_list->next->str))
-				return (EXIT_FAILURE);
+				return (1);
 		}
 		cmd->redirections = cmd->redirections->next;
 	}
 	cmd->redirections = start;
-	return (EXIT_SUCCESS);
+	free_tmp(&utils_tmp);
+	return (0);
 }
 
 char	*get_env_value(char *env_name, char **envp)
