@@ -151,15 +151,15 @@ void	better_args(t_utils_hold *utils_hold)
 
 void	free_tmp(t_utils_hold *utils_tmp)
 {
-	int i = 0;
-
-	while (utils_tmp->lexer_list->str)
+	t_lexer *current = utils_tmp->lexer_list;
+	while (current)
 	{
-		i++;
-		utils_tmp->lexer_list = utils_tmp->lexer_list->next;
+		t_lexer *next = current->next;
+		free(current->str);
+		free(current);
+		current = next;
 	}
 	free(utils_tmp->args);
-	free(utils_tmp->lexer_list);
 }
 
 int	check_redirections(t_simple_cmds *cmd, t_utils_hold *utils_hold)
@@ -222,6 +222,14 @@ char	*get_env_value(char *env_name, char **envp)
 
 void	clean_exit(t_utils_hold *utils_hold, int exit_code)
 {
+	t_lexer *current = utils_hold->simple_cmds->redirections;
+	while (current)
+	{
+		t_lexer *next = current->next;
+		free(current->str);
+		free(current);
+		current = next;
+	}
 	free(utils_hold->args);
 	free(utils_hold->pwd);
 	free(utils_hold->old_pwd);

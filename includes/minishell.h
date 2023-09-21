@@ -80,6 +80,9 @@ typedef struct s_global
 
 extern t_global	g_global;
 
+void	ft_lstclear2(t_lexer **lst);
+void	*ft_lstclear_cmd(t_lexer **lst);
+
 // ------------------UTILS_MAIN------------------//
 int				ft_strcmp(const char *s1, const char *s2);
 char			*check_path(char **envp);

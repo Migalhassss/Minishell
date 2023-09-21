@@ -130,7 +130,7 @@ int	add_redirection(t_lexer *tmp, t_parser_utils *parser_utils)
 	lexer_delete_one(&parser_utils->lexer_list, j);
 	parser_utils->num_redirections++;
 	return (1);
-}
+}	
 
 void	rm_redirections(t_parser_utils *parser_utils)
 {
@@ -155,9 +155,9 @@ int	count_args(t_lexer *lexerlist)
 	int		i;
 	t_lexer	*tmp;
 
-	i = 0;
-	tmp = lexerlist;
-	while (tmp && tmp->token != 1)
+		i = 0;
+		tmp = lexerlist;
+		while (tmp && tmp->token != 1)
 	{
 		if (tmp->token == 0)
 			i++;
