@@ -97,152 +97,102 @@ char	*make_leaks_clean(char *tmp2, char *str, char *exit_code, int flag)
 
 char	*exit_code(t_utils_hold *utils_hold)
 {
-	int	i;
-	int	flag;
 	char	*tmp;
-	char	*tmp2;
-	char	*exit_code;
 
-	i = 0;
-	flag = 0;
-	while (utils_hold->args[i])
-	{
-		if (utils_hold->args[i] == '\'')
-		{
-			i++;
-			while (utils_hold->args[i] != '\'' && utils_hold->args[i])
-				i++;
-		}
-		if (utils_hold->args[i] == '$' && utils_hold->args[i + 1] == '?')
-		{
-			flag = i;
-			tmp2 = ft_strdup(utils_hold->args + i + 2);
-			break ;
-		}
-		i++;
-	}
-	if (flag == 0)
-		return (utils_hold->args);
-	exit_code = ft_itoa(g_global.exit_code);
-	tmp = make_leaks_clean(tmp2, utils_hold->args, exit_code, flag);
-	free(exit_code);
+	(void) utils_hold;
+	tmp = ft_itoa(g_global.exit_code);
 	return (tmp);
 }
 
-char	*check_if_is_first(t_utils_hold *utils_hold)
-{
-	char	*tmp;
-	char	*exit_code;
+char	*take_var_name(char *args, int i) {
+	char *var_name;
+	int	j;
 
-	exit_code = NULL;
-	tmp = NULL;
-	if (utils_hold->args[0] == '$' && utils_hold->args[1] == '?')
-	{
-		exit_code = ft_itoa(g_global.exit_code);
-		tmp = ft_strjoin(exit_code, utils_hold->args + 2);
-	}
-	else
-		return (utils_hold->args);
-	free(utils_hold->args);
-	free(exit_code);
-	utils_hold->args = ft_strdup(tmp);
-	free(tmp);
-	return (utils_hold->args);
+	j = 0;
+	i++;
+	var_name = malloc(ft_strlen(args) + 1);
+	while (args[i] != '\0' && args[i] != ' ' && args[i] != '$'
+		&& args[i] != '\'' && args[i] != '\"')
+		var_name[j++] = args[i++];
+	var_name[j] = '\0';
+	return (var_name);
 }
 
-void	put_in_args(t_utils_hold *utils_hold, char *env_value, int i)
+char	*empty_env(char *args, char *var_name, int i)
 {
+	char	*tmp;
 	char	*tmp2;
 	char	*tmp3;
 
-
-	tmp2 = ft_substr(env_value, 0, ft_strlen(env_value));
-	free(env_value);
-	tmp3 = ft_strjoin(tmp2, utils_hold->args + i);
-	free(tmp2);
-	free(utils_hold->args);
-	utils_hold->args = tmp3;
-}
-
-void	transfer2(t_utils_hold *utils_hold, int *i)
-{
-	int		j;
-	char	*tmp;
-	char	*env_value;
-
-	if (utils_hold->args[*i + 1] == '?')
-	{
-		tmp = ft_itoa(g_global.exit_code);
-		put_in_args(utils_hold, tmp, *i);
-		free(tmp);
-		return ;
-	}
-	j = *i + 1;
-	while (utils_hold->args[*i] && utils_hold->args[*i] != ' '
-		&& utils_hold->args[*i] != '\'' && utils_hold->args[*i] != '"')
-		(*i)++;
-	tmp = ft_substr(utils_hold->args, j, *i - 1);
-	env_value = get_env_value(tmp, utils_hold->envp);
+	tmp = ft_substr(args, 0, i);
+	tmp2 = ft_substr(args, i + ft_strlen(var_name) + 1, ft_strlen(args));
+	tmp3 = ft_strjoin(tmp, tmp2);
 	free(tmp);
-	put_in_args(utils_hold, env_value, *i);
+	free(tmp2);
+	free(args);
+	return (tmp3);
 }
 
-void	clean_args(t_utils_hold *utils_hold, char *cmd, int flag)
+char	*update_args(char *args, char *var_value, char *var_name, int i)
 {
 	char	*tmp;
 	char	*tmp2;
+	char	*tmp3;
 
-	if (flag == 1)
-	{
-		tmp = ft_strjoin(cmd, " ");
-		free(cmd);
-		tmp2 = ft_strjoin(tmp, utils_hold->args);
-		free(utils_hold->args);
-		free(tmp);
-		utils_hold->args = tmp2;
-	}
-	else
-		free(cmd);
+	tmp = ft_substr(args, 0, i);
+	tmp2 = ft_strjoin(tmp, var_value);
+	free(tmp);
+	tmp = ft_substr(args, i + ft_strlen(var_name) + 1, ft_strlen(args));
+	tmp3 = ft_strjoin(tmp2, tmp);
+	free(tmp);
+	free(tmp2);
+	free(args);
+	return (tmp3);
 }
 
-void	 check_user2(t_utils_hold *utils_hold, int *i)
-{	
-	if (!ft_strncmp(utils_hold->args + *i, "'$USER'", 7))
-		put_in_args(utils_hold, get_env_value(utils_hold->args + *i, utils_hold->envp), *i);
-	else if (!ft_strncmp(utils_hold->args + *i, "\'\"$USER\"\'", 9))
-	{
-		put_in_args(utils_hold, "\"$USER\"", *i);
-		*i += 8;
-	}
-}
-
-void	envp_value(t_utils_hold *utils_hold)
+char	*detect_dollar_sigs(char *args, char *var_value, char *var_name, int *i)
 {
-	int		i;
-	int		flag;
-	char	*cmd;
+	if (ft_strlen(var_value) == 0)
+		args = empty_env(args, var_name, (*i));
+	else
+		args = update_args(args, var_value, var_name, (*i));
+	(*i) = (*i) + ft_strlen(var_value);
+	free(var_value);
+	return (args);
+}
 
+char	*replace_env_vars(char *args, char **envp)
+{
+	char	*var_name;
+	char	*var_value;
+	int		i;
+	bool	in_quotes;
+
+	if (ft_strchr(args, '$') == NULL)
+		return (args);
 	i = 0;
-	flag = 0;
-	cmd = take_command_to_check(utils_hold->args);
-	while (utils_hold->args[i])
+	in_quotes = false;
+	while (args[i] != '\0')
 	{
-		if (utils_hold->args[i] == '\'')
+		if (args[i] == '\"')
+			in_quotes = !in_quotes;
+		if (args[i] == '\'' && in_quotes == false)
 		{
 			i++;
-			while (utils_hold->args[i] != '\'' && utils_hold->args[i])
+			while (args[i] != '\'')
 				i++;
 		}
-		if (utils_hold->args[i] == '$')
+		if (args[i] == '$')
 		{
-			flag = 1;
-			transfer2(utils_hold, &i);
+			var_name = take_var_name(args, i);
+			var_value = get_env_value(var_name, envp);
+			args = detect_dollar_sigs(args, var_value, var_name, &i);
+			free(var_name);
 		}
-		if (utils_hold->args[i] == '"')
-			check_user2(utils_hold, &i);
 		i++;
 	}
-	clean_args(utils_hold, cmd, flag);
+	args[i] = '\0';
+	return (args);
 }
 
 int	minishell_loop(t_utils_hold *utils_hold)
@@ -261,9 +211,11 @@ int	minishell_loop(t_utils_hold *utils_hold)
 	if (ft_strlen(utils_hold->args) == 0)
 		reset_utils_hold(utils_hold);
 	add_history(utils_hold->args);
-	if (count_quotes(utils_hold->args) == 1)
+	utils_hold->args = replace_env_vars(utils_hold->args, utils_hold->envp);
+	if (count_quotes(utils_hold) == 1)
 		return (ft_error(2, utils_hold));
-	envp_value(utils_hold);
+	if (ft_strlen(utils_hold->args) == 0)
+		reset_utils_hold(utils_hold);
 	if (token_reader(utils_hold) == 0)
 		return (ft_error(1, utils_hold));
 	parser(utils_hold);

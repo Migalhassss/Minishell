@@ -83,7 +83,6 @@ char	*generate_heredoc_filename(void)
 	return (file_name);
 }
 
-
 void	dup_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold, int end[2], int fd_in)
 {
 	if (cmd->prev && dup2(fd_in, STDIN_FILENO) < 0)

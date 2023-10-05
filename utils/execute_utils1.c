@@ -211,6 +211,10 @@ char	*get_env_value(char *env_name, char **envp)
 	int		i;
 
 	i = 0;
+	if (!env_name)
+		return (NULL);
+	if (env_name[0] == '?')
+		return (ft_itoa(g_global.exit_code));
 	while (envp[i])
 	{
 		if (!ft_strncmp(envp[i], env_name, ft_strlen(env_name)))

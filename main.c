@@ -20,7 +20,7 @@ void	sigint_handler(int sig_num)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	(void)sig_num;
+	(void) sig_num;
 }
 
 int	main(int ac, char **av, char **envp)

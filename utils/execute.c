@@ -73,8 +73,8 @@ void	single_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 	if (!ft_strcmp(exit_cmd, "exit") || !ft_strcmp(exit_cmd, "cd")
 		|| !ft_strcmp(exit_cmd, "export") || !ft_strcmp(exit_cmd, "unset"))
 	{
-		which_command(utils_hold);
 		free(exit_cmd);
+		which_command(utils_hold);
 		return ;
 	}
 	free(exit_cmd);
@@ -91,6 +91,7 @@ void	single_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 int	prepare_executor(t_utils_hold *utils_hold)
 {
 	// g_global.in_cmd = 1;
+	
 	if (utils_hold->pipes == 0)
 		single_cmd(utils_hold->simple_cmds, utils_hold);
 	else

@@ -80,8 +80,8 @@ typedef struct s_global
 
 extern t_global	g_global;
 
-void	ft_lstclear2(t_lexer **lst);
-void	*ft_lstclear_cmd(t_lexer **lst);
+void			ft_lstclear2(t_lexer **lst);
+void			*ft_lstclear_cmd(t_lexer **lst);
 
 // ------------------UTILS_MAIN------------------//
 int				ft_strcmp(const char *s1, const char *s2);
@@ -95,11 +95,11 @@ int				pwd_find(t_utils_hold *utils_hold);
 int				implement_utils_hold(t_utils_hold *utils_hold);
 // ----------------------------------------------//
 
-void	print_list(t_lexer *lexer_list);
+void			print_list(t_lexer *lexer_list);
 //------------------MINISHELL_LOOP---------------//
 int				minishell_loop(t_utils_hold *utils_hold);
 int				reset_utils_hold(t_utils_hold *utils_hold);
-int				count_quotes(char *line);
+int				count_quotes(t_utils_hold *utils_hold);
 int				find_matching_quote(char *line, int i, int *num_del, int del);
 int				token_reader(t_utils_hold *utils_hold);
 int				handle_token(t_utils_hold *utils_hold, int i,

@@ -12,8 +12,6 @@
 
 #include "../includes/minishell.h"
 
-// do add_node function
-
 void	print_list(t_lexer *lexer_list)
 {
 	t_lexer	*tmp;
