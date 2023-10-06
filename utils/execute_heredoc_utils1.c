@@ -64,8 +64,8 @@ int	ft_heredoc(t_utils_hold *utils_hold, t_lexer *heredoc, char *file_name)
 		quotes = true;
 	else
 		quotes = false;
-	// delete_quotes(heredoc->str, '\"');
-	// delete_quotes(heredoc->str, '\'');
+	delete_quotes(heredoc->str, '\"');
+	delete_quotes(heredoc->str, '\'');
 	sl = create_heredoc(heredoc, quotes, utils_hold, file_name);
 	utils_hold->heredoc = true;
 	return (sl);

@@ -86,15 +86,43 @@ int	send_heredoc(t_utils_hold *utils_hold, t_simple_cmds *cmd)
 	return (0);
 }
 
+// t_simple_cmds	call_expander(t_utils_hold utils_hold, t_simple_cmds simple_cmds)
+// {
+
+// }
+
+
+void	print_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+	{
+		printf("array[%d]: %s\n", i, array[i]);
+		i++;
+	}
+	printf("\n");
+}
+
+void	print_list2(t_simple_cmds *map)
+{
+	while (map)
+	{
+		print_array(map->str);
+		map = map->next;
+	}
+}
+
 int	executor(t_utils_hold *utils_hold)
 {
 	int		end[2];
 	int		fd_in;
 
 	fd_in = STDIN_FILENO;
+	// print_list2(utils_hold->simple_cmds);
 	while (utils_hold->simple_cmds)
 	{
-		// utils_hold->simple_cmds = call_expander(utils_hold, utils_hold->simple_cmds);
 		if (utils_hold->simple_cmds->next)
 			pipe(end);
 		send_heredoc(utils_hold, utils_hold->simple_cmds);

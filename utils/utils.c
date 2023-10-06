@@ -104,7 +104,6 @@ char	*delete_quotes(char *str, char c)
 			while (tmp[i + j] == c)
 				j++;
 			ft_strlcpy(&tmp[i], &tmp[i + j], ft_strlen(tmp) - i);
-			printf("tmp = %s\n", tmp);
 		}
 		i++;
 	}

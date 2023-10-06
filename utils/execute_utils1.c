@@ -42,6 +42,7 @@ char	**resplit_str(char **double_arr)
 	free_array(ret);
 	ret = ft_split(joined_str, ' ');
 	free(joined_str);
+	printf("ret[0] = %s\n", ret[0]);
 	return (ret);
 }
 
@@ -245,6 +246,19 @@ void	clean_exit(t_utils_hold *utils_hold, int exit_code)
 	exit(exit_code);
 }
 
+void	print_arrayy(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+	{
+		printf("array[%d]: %s\n", i, array[i]);
+		i++;
+	}
+	printf("\n");
+}
+
 void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 {
 	int	exit_code;
@@ -258,6 +272,7 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 			perror("error\n");
 		}
 	}
+	utils_hold->args = join_split_str(cmd->str, NULL);
 	if (cmd->str[0][0] != '\0' && check_builtins(utils_hold) == 1)
 	{
 		which_command(utils_hold);
@@ -265,9 +280,7 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 			free_array(cmd->str);
 	}
 	else if (cmd->str[0][0] != '\0')
-	{
 		exit_code = find_cmd(cmd, utils_hold);
-	}
 	free_array(utils_hold->envp);
 	clean_exit(utils_hold, exit_code);
 }
