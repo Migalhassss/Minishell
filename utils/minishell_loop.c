@@ -156,7 +156,7 @@ char	*detect_dollar_sigs(char *args, char *var_value, char *var_name, int *i)
 		args = empty_env(args, var_name, (*i));
 	else
 		args = update_args(args, var_value, var_name, (*i));
-	(*i) = (*i) + ft_strlen(var_value);
+	(*i) = (*i) + ft_strlen(var_name);
 	free(var_value);
 	return (args);
 }
@@ -195,6 +195,23 @@ char	*replace_env_vars(char *args, char **envp)
 	return (args);
 }
 
+void	free_lexer_list(t_utils_hold *utils_hold)
+{
+	t_lexer	*tmp;
+
+	t_lexer	*lexertmp;
+	lexertmp = utils_hold->simple_cmds->redirections;
+	while (lexertmp)
+	{
+		tmp = lexertmp->next;
+		if (lexertmp->str)
+			free(lexertmp->str);
+		free(lexertmp);
+		lexertmp = tmp;
+	}
+	lexertmp = NULL;
+}
+
 int	minishell_loop(t_utils_hold *utils_hold)
 {
 	char	*tmp;
@@ -220,6 +237,7 @@ int	minishell_loop(t_utils_hold *utils_hold)
 		return (ft_error(1, utils_hold));
 	parser(utils_hold);
 	prepare_executor(utils_hold);
+	free_lexer_list(utils_hold);
 	reset_utils_hold(utils_hold);
 	return (1);
 }

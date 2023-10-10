@@ -153,6 +153,7 @@ int	ft_unset(t_utils_hold *utils_hold)
 	}
 	else
 	{
+		printf("unset: `%s': not a valid identifier\n", hold_args[i]);
 		free_array(hold_args);
 		return (1);
 	}

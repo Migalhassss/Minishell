@@ -55,8 +55,11 @@ int	check_args(char **hold_args)
 		j = 0;
 		while (hold_args[i][j])
 		{
-			if (hold_args[i][0] == '=')
+			if (hold_args[i][0] == '=' || ft_isdigit(hold_args[i][0]) == 1)
+			{
+				printf("export: `%s': not a valid identifier\n", hold_args[i]);
 				return (-1);
+			}
 			else if (hold_args[i][j] == '=')
 				flag = 1;
 			j++;
@@ -187,7 +190,7 @@ int	ft_export(t_utils_hold *utils_hold)
 	i = 0;
 	if (utils_hold->args[0] == '\0')
 		return (1);
-	hold_args = ft_split(utils_hold->args, ' '); 
+	hold_args = ft_split(utils_hold->args, ' ');
 	if (check_args(hold_args) == -1)
 	{
 		free_array(hold_args);

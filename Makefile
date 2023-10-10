@@ -30,7 +30,7 @@ READLINE_LIB = -lreadline -lhistory -L $(READLINE_DIR)/lib
 
 RM	= rm -f
 
-CC	= gcc
+CC	= cc
 
 CFLAGS	= -Wall -Wextra -Werror -g #-fsanitize=address
 

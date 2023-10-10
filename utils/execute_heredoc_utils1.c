@@ -38,7 +38,7 @@ int	create_heredoc(t_lexer *heredoc, bool quotes,
 	line = readline(">");
 	while (line && ft_strncmp(heredoc->str, line, ft_strlen(heredoc->str)))
 	{
-		printf("heredoc->str = %s\n", heredoc->str);
+		// printf("heredoc->str = %s\n", heredoc->str);
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);

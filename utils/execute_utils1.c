@@ -46,6 +46,21 @@ char	**resplit_str(char **double_arr)
 	return (ret);
 }
 
+void	free_lexer(t_lexer *redirections)
+{
+	t_lexer	*current;
+	t_lexer	*next;
+
+	current = redirections;
+	while (current)
+	{
+		next = current->next;
+		free(current->str);
+		free(current);
+		current = next;
+	}
+}
+
 int	find_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 {
 	int		i;
@@ -53,6 +68,7 @@ int	find_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 
 	i = 0;
 	cmd->str = resplit_str(cmd->str);
+	free_lexer(cmd->redirections);
 	if (!access(cmd->str[0], F_OK))
 		execve(cmd->str[0], cmd->str, utils_hold->envp);
 	while (utils_hold->paths[i])
@@ -124,32 +140,6 @@ int	handle_outfile(t_lexer *redirection, char *file)
 	return (EXIT_SUCCESS);
 }
 
-
-void	better_args(t_utils_hold *utils_hold)
-{
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	while (utils_hold->args[i])
-	{
-		if (utils_hold->args[i] == '<' || utils_hold->args[i] == '>')
-		{
-			tmp = ft_substr(utils_hold->args, 0, i);
-			free(utils_hold->args);
-			utils_hold->args = ft_strdup(tmp);
-			free(tmp);
-			tmp = ft_strtrim(utils_hold->args, " ");
-			free(utils_hold->args);
-			utils_hold->args = ft_strdup(tmp);
-			free(tmp);
-			return ;
-		}
-		i++;
-	}
-	return ;
-}
-
 void	free_tmp(t_utils_hold *utils_tmp)
 {
 	t_lexer *current = utils_tmp->lexer_list;
@@ -171,7 +161,6 @@ int	check_redirections(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 
 	utils_tmp.args = ft_strdup(utils_hold->args);
 	token_reader(&utils_tmp);
-	better_args(utils_hold);
 	start = cmd->redirections;
 	tmp = utils_tmp.lexer_list;
 	while (cmd->redirections)
@@ -227,10 +216,12 @@ char	*get_env_value(char *env_name, char **envp)
 
 void	clean_exit(t_utils_hold *utils_hold, int exit_code)
 {
+	t_lexer *next;
 	t_lexer *current = utils_hold->simple_cmds->redirections;
+
 	while (current)
 	{
-		t_lexer *next = current->next;
+		next = current->next;
 		free(current->str);
 		free(current);
 		current = next;
@@ -239,7 +230,6 @@ void	clean_exit(t_utils_hold *utils_hold, int exit_code)
 	free(utils_hold->pwd);
 	free(utils_hold->old_pwd);
 	free_array(utils_hold->paths);
-	rl_clear_history();
 	free(utils_hold->simple_cmds);
 	if (utils_hold->pipes)
 		free(utils_hold->pid);
@@ -269,9 +259,10 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 		if (check_redirections(cmd, utils_hold))
 		{
 			clean_exit(utils_hold, exit_code);
-			perror("error\n");
+			perror("error");
 		}
 	}
+	free(utils_hold->args);
 	utils_hold->args = join_split_str(cmd->str, NULL);
 	if (cmd->str[0][0] != '\0' && check_builtins(utils_hold) == 1)
 	{
