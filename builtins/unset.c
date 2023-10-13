@@ -131,6 +131,42 @@ char	**dup_array(t_utils_hold *utils_hold, int j)
 	return (dup_envp);
 }
 
+int	check_args1(char **hold_args)
+{
+	int	i;
+	int	j;
+	int	flag;
+
+	i = 0;
+	j = 0;
+	flag = 0;
+	if (ft_strchr(hold_args[0], '=') != NULL)
+	{
+		printf("minishell: export: `%s': not a valid identifier\n", hold_args[0]);
+		return (-1);
+	}
+	while (hold_args[i])
+	{
+		j = 0;
+		while (hold_args[i][j])
+		{
+			if (ft_isdigit(hold_args[i][0]) == 1)
+			{
+				printf("minishell: export: `%s': not a valid identifier\n", hold_args[i]);
+				return (-1);
+			}
+			else if (hold_args[i][j] == '=')
+				flag = 1;
+			j++;
+		}
+		if (flag == 0)
+			return (-1);
+		flag = 0;
+		i++;
+	}
+	return (0);
+}
+
 int	ft_unset(t_utils_hold *utils_hold)
 {
 	int		j;
@@ -141,7 +177,7 @@ int	ft_unset(t_utils_hold *utils_hold)
 	j = 0;
 	i = 0;
 	hold_args = ft_split(utils_hold->args, ' ');
-	if (check_if_exists2(hold_args, utils_hold) != -1)
+	if (check_args1(hold_args) == 0 && check_if_exists2(hold_args, utils_hold) != -1)
 	{
 		while (hold_args[i])
 		{
@@ -153,7 +189,6 @@ int	ft_unset(t_utils_hold *utils_hold)
 	}
 	else
 	{
-		printf("unset: `%s': not a valid identifier\n", hold_args[i]);
 		free_array(hold_args);
 		return (1);
 	}

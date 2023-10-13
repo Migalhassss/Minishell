@@ -17,6 +17,12 @@ t_global	g_global;
 void	sigint_handler(int sig_num)
 {
 	write (1, "\n", 1);
+	if (g_global.in_cmd == 1)
+	{
+		rl_replace_line("", 0);
+		rl_redisplay();
+		return ;
+	}
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();

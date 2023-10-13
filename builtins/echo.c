@@ -56,24 +56,20 @@ void	printnopipe(char	*str)
 
 void	print_args(char	*args)
 {
-	char	**tmp;
-	int		i;
+	int	i;
 
 	i = 0;
-	tmp = ft_split(args, ' ');
-	while (tmp[i])
+	while (args[i])
 	{
-		if (ft_strchr(tmp[i], '|') || ft_strchr(tmp[i], '>') || ft_strchr(tmp[i], '<'))
-		{
-			printnopipe(tmp[i]);
+		if (args[i] == '|')
 			return ;
-		}
-		ft_putstr_fd(tmp[i], 1);
-		if (tmp[i + 1])
-			ft_putchar_fd(' ', 1);
+		else if (args[i] == '<')
+			return ;
+		else if (args[i] == '>')
+			return ;
+		ft_putchar_fd(args[i], 1);
 		i++;
 	}
-	free_array(tmp);
 }
 
 int	ft_echo(t_utils_hold *utils_hold)

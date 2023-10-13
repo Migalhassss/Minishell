@@ -126,6 +126,12 @@ char	*empty_env(char *args, char *var_name, int i)
 
 	tmp = ft_substr(args, 0, i);
 	tmp2 = ft_substr(args, i + ft_strlen(var_name) + 1, ft_strlen(args));
+	if (ft_strlen(tmp2) == 0)
+	{
+		free(tmp2);
+		free(args);
+		return (tmp);
+	}
 	tmp3 = ft_strjoin(tmp, tmp2);
 	free(tmp);
 	free(tmp2);
@@ -150,15 +156,41 @@ char	*update_args(char *args, char *var_value, char *var_name, int i)
 	return (tmp3);
 }
 
+char	*only_dollar(char *args, char *var_name)
+{
+	char	*tmp;
+	char	*tmp2;
+	char	*tmp3;
+
+	tmp = ft_substr(args, 0, ft_strlen(var_name) + 1);
+	tmp2 = ft_substr(args, ft_strlen(var_name) + 1, ft_strlen(args));
+	tmp3 = ft_strjoin(tmp, tmp2);
+	free(tmp);
+	free(tmp2);
+	free(args);
+	return (tmp3);
+}
+
 char	*detect_dollar_sigs(char *args, char *var_value, char *var_name, int *i)
 {
 	if (ft_strlen(var_value) == 0)
 		args = empty_env(args, var_name, (*i));
 	else
 		args = update_args(args, var_value, var_name, (*i));
-	(*i) = (*i) + ft_strlen(var_name);
 	free(var_value);
 	return (args);
+}
+
+int	check_if_onlydollar(char *args, int i)
+{
+	if (args[i + 1] != '\0' && args[i + 1] != ' '
+			&& args[i + 1] != '\'' && args[i + 1] != '\"')
+		return (1);
+	if ((args[i + 1] == '\"' || args[i + 1] == '\'')
+			&& args[i + 2] != '\0' && args[i + 2] != ' '
+			&& args[i + 2] != '\'' && args[i + 2] != '\"')
+		return (1);
+	return (0);
 }
 
 char	*replace_env_vars(char *args, char **envp)
@@ -173,21 +205,22 @@ char	*replace_env_vars(char *args, char **envp)
 	i = 0;
 	in_quotes = false;
 	while (args[i] != '\0')
-	{
+	{	
 		if (args[i] == '\"')
 			in_quotes = !in_quotes;
 		if (args[i] == '\'' && in_quotes == false)
-		{
+		{	
 			i++;
 			while (args[i] != '\'')
 				i++;
 		}
-		if (args[i] == '$')
+		if (args[i] == '$' && check_if_onlydollar(args, i) == 1)
 		{
 			var_name = take_var_name(args, i);
 			var_value = get_env_value(var_name, envp);
 			args = detect_dollar_sigs(args, var_value, var_name, &i);
 			free(var_name);
+			i--;
 		}
 		i++;
 	}
@@ -233,7 +266,7 @@ int	minishell_loop(t_utils_hold *utils_hold)
 		return (ft_error(2, utils_hold));
 	if (ft_strlen(utils_hold->args) == 0)
 		reset_utils_hold(utils_hold);
-	if (token_reader(utils_hold) == 0)
+	if (token_reader(utils_hold) == 1)
 		return (ft_error(1, utils_hold));
 	parser(utils_hold);
 	prepare_executor(utils_hold);

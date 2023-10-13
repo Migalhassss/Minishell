@@ -90,17 +90,19 @@ void	single_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 
 int	prepare_executor(t_utils_hold *utils_hold)
 {
-	// g_global.in_cmd = 1;
-	
-	if (utils_hold->pipes == 0)
-		single_cmd(utils_hold->simple_cmds, utils_hold);
-	else
+	g_global.in_cmd = 1;
+	if (check_builtins(utils_hold) == 1 || check_cmd(utils_hold->simple_cmds, utils_hold) == 0)
 	{
-		utils_hold->pid = ft_calloc(sizeof(int), utils_hold->pipes + 2);
-		if (!utils_hold->pid)
-			return (ft_error(1, utils_hold));
-		executor(utils_hold);
+		if (utils_hold->pipes == 0)
+			single_cmd(utils_hold->simple_cmds, utils_hold);
+		else
+		{
+			utils_hold->pid = ft_calloc(sizeof(int), utils_hold->pipes + 2);
+			if (!utils_hold->pid)
+				return (ft_error(1, utils_hold));
+			executor(utils_hold);
+		}
 	}
-	// g_global.in_cmd = 0;
+	g_global.in_cmd = 0;
 	return (0);
 }

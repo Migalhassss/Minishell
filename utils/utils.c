@@ -112,14 +112,68 @@ char	*delete_quotes(char *str, char c)
 	return (str);
 }
 
+char	*remove_this_char(char *args, int i)
+{
+	char	*tmp;
+	char	*tmp2;
+
+	tmp = ft_substr(args, 0, i);
+	tmp2 = ft_substr(args, i + 1, ft_strlen(args));
+	free(args);
+	args = ft_strjoin(tmp, tmp2);
+	free(tmp);
+	free(tmp2);
+	return (args);
+}
+
+void	remove_quotes(t_utils_hold *utils_hold)
+{
+	char				*tmp;
+	unsigned int		i;
+	bool				in_quotes;
+
+	i = 0;
+	in_quotes = false;
+	tmp = ft_strdup(utils_hold->args);
+	free(utils_hold->args);
+	while (tmp[i])
+	{
+		if (tmp[i] && tmp[i] == '\"')
+		{
+			tmp = remove_this_char(tmp, i);
+			if (i > ft_strlen(tmp) || ft_strlen(tmp) == 0)
+				break ;
+			i--;
+			printf("tmp[i] = %c\n", tmp[i]);
+			if (ft_strlen(tmp) == 0)
+				break ;
+			in_quotes = !in_quotes;
+		}
+		if (tmp[i] && tmp[i] == '\'' && in_quotes == false)
+		{
+			tmp = remove_this_char(tmp, i);
+			if (i > ft_strlen(tmp))
+				break ;
+			while (tmp[i] && tmp[i] != '\'')
+				i++;
+			tmp = remove_this_char(tmp, i);
+			i--;
+		}
+		i++;
+	}
+	utils_hold->args = ft_strdup(tmp);
+	free(tmp);
+}
+
 int		count_quotes(t_utils_hold *utils_hold)
 {
+	if (ft_strlen(utils_hold->args) == 0)
+		reset_utils_hold(utils_hold);
 	if (any_quote(utils_hold->args) == 0)
 		return (0);
 	if (single_quote(utils_hold->args) == 1 || double_quote(utils_hold->args) == 1)
 		return (1);
-	utils_hold->args = delete_quotes(utils_hold->args, '"');
-	utils_hold->args = delete_quotes(utils_hold->args, '\'');
+	remove_quotes(utils_hold);
 	return (0);
 }
 

@@ -66,7 +66,7 @@ int	send_heredoc(t_utils_hold *utils_hold, t_simple_cmds *cmd)
 {
 	t_lexer	*start;
 	int		sl;
-
+	int		fd;
 	start = cmd->redirections;
 	sl = 0;
 	while (cmd->redirections)
@@ -76,7 +76,11 @@ int	send_heredoc(t_utils_hold *utils_hold, t_simple_cmds *cmd)
 			if (cmd->hd_file_name)
 				free(cmd->hd_file_name);
 			cmd->hd_file_name = generate_heredoc_filename();
+			fd = open(cmd->hd_file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			if (fd < 0)
+				ft_error(5, utils_hold);
 			sl = ft_heredoc(utils_hold, cmd->redirections, cmd->hd_file_name);
+			close(fd);
 			if (sl)
 				return (reset_utils_hold(utils_hold));
 		}
@@ -85,12 +89,6 @@ int	send_heredoc(t_utils_hold *utils_hold, t_simple_cmds *cmd)
 	cmd->redirections = start;
 	return (0);
 }
-
-// t_simple_cmds	call_expander(t_utils_hold utils_hold, t_simple_cmds simple_cmds)
-// {
-
-// }
-
 
 void	print_array(char **array)
 {

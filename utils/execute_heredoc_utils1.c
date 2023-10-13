@@ -26,19 +26,19 @@ int	check_fd_heredoc(t_utils_hold *utils_hold, int end[2], t_simple_cmds *cmd)
 	return (fd_in);
 }
 
-int	create_heredoc(t_lexer *heredoc, bool quotes,
-	t_utils_hold *utils_hold, char *file_name)
+int	create_heredoc(bool quotes,
+	t_lexer *tmp, char *file_name)
 {
 	int		fd;
 	char	*line;
 
 	(void) quotes;
-	(void) utils_hold;
+	while (tmp && tmp->token != 5)
+		tmp = tmp->next;
 	fd = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	line = readline(">");
-	while (line && ft_strncmp(heredoc->str, line, ft_strlen(heredoc->str)))
+	while (line && ft_strncmp(tmp->next->str, line, ft_strlen(tmp->next->str)))
 	{
-		// printf("heredoc->str = %s\n", heredoc->str);
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
@@ -53,8 +53,11 @@ int	create_heredoc(t_lexer *heredoc, bool quotes,
 
 int	ft_heredoc(t_utils_hold *utils_hold, t_lexer *heredoc, char *file_name)
 {
-	bool	quotes;
-	int		sl;
+	bool			quotes;
+	int				sl;
+	t_utils_hold	tmp_utils;
+	t_lexer		*tmp;
+
 
 	sl = 0;
 	if ((heredoc->str[0] == '\"'
@@ -64,10 +67,12 @@ int	ft_heredoc(t_utils_hold *utils_hold, t_lexer *heredoc, char *file_name)
 		quotes = true;
 	else
 		quotes = false;
-	delete_quotes(heredoc->str, '\"');
-	delete_quotes(heredoc->str, '\'');
-	sl = create_heredoc(heredoc, quotes, utils_hold, file_name);
+	tmp_utils.args = ft_strdup(utils_hold->args);
+	token_reader(&tmp_utils);
+	tmp = tmp_utils.lexer_list;
+	sl = create_heredoc(quotes, tmp, file_name);
 	utils_hold->heredoc = true;
+	free_tmp(&tmp_utils);
 	return (sl);
 }
 
@@ -78,7 +83,7 @@ char	*generate_heredoc_filename(void)
 	char		*file_name;
 
 	num = ft_itoa(i++);
-	file_name = ft_strjoin("build/.tmp_heredoc_file_", num);
+	file_name = ft_strjoin("/tmp/.tmp_heredoc_file_", num);
 	free(num);
 	return (file_name);
 }

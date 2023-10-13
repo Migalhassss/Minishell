@@ -109,6 +109,29 @@ int	handle_token(t_utils_hold *utils_hold, int i, t_lexer **lexer_list)
 	return (j);
 }
 
+int	check_pipes(t_utils_hold *utils_hold)
+{
+	int	i;
+
+	i = 0;
+	if (utils_hold->args[0] == '|' || utils_hold->args[ft_strlen(utils_hold->args) - 1] == '|')
+		return (ft_error(0, utils_hold));
+	while (utils_hold->args[i])
+	{
+		if (utils_hold->args[i] == '\"')
+		{
+			i++;
+			while (utils_hold->args[i] != '\"' && utils_hold->args[i] != '\0')
+				i++;
+		}
+		if (utils_hold->args[i] == '|')
+			if (utils_hold->args[i + 1] == '|')
+				return (ft_error(0, utils_hold));
+		i++;
+	}
+	return (0);
+}
+
 int	token_reader(t_utils_hold *utils_hold)
 {
 	int		i;
@@ -116,27 +139,32 @@ int	token_reader(t_utils_hold *utils_hold)
 
 	i = 0;
 	utils_hold->lexer_list = NULL;
+	printf("args = %s\n", utils_hold->args);
+	if (ft_strlen(utils_hold->args) == 0)
+		return (0);
+	if (ft_strchr(utils_hold->args, '|') && check_pipes(utils_hold))
+		return (ft_error(0, utils_hold));
 	while (utils_hold->args[i])
 	{
 		if (utils_hold->args[i] == ' ')
 			i++;
 		else if (utils_hold->args[i] == '\"')
 		{
-			i++;
 			j = i;
-			while(utils_hold->args[j] != '\"' && utils_hold->args[j] != '\0')
-				j++;
-			if (!add_node(ft_substr(utils_hold->args, i, j), 0,
-					&utils_hold->lexer_list, utils_hold))
-				return (0);
-			i = j + 1;
+			i++;
+			while(utils_hold->args[i] != '\"' && utils_hold->args[i] != '\0')
+				i++;
+			if (!add_node(ft_substr(utils_hold->args, j, i - j + 1), 0,
+				&utils_hold->lexer_list, utils_hold))
+				return (1);
+			i++;
 		}
 		else if (utils_hold->args[i] == '|' || utils_hold->args[i] == '<'
 			|| utils_hold->args[i] == '>')
 		{
 			j = handle_token(utils_hold, i, &utils_hold->lexer_list);
 			if (j == -1)
-				return (0);
+				return (1);
 			i += j;
 		}
 		else
@@ -148,9 +176,9 @@ int	token_reader(t_utils_hold *utils_hold)
 				j++;
 			if (!add_node(ft_substr(utils_hold->args, i, j), 0,
 					&utils_hold->lexer_list, utils_hold))
-				return (0);
+				return (1);
 			i += j;
 		}
 	}
-	return (1);
+	return (0);
 }

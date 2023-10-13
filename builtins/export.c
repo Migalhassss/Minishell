@@ -12,6 +12,37 @@
 
 #include "../includes/minishell.h"
 
+int	check_args(char **hold_args)
+{
+	int	i;
+	int	j;
+	int	flag;
+
+	i = 0;
+	j = 0;
+	flag = 0;
+	while (hold_args[i])
+	{
+		j = 0;
+		while (hold_args[i][j])
+		{
+			if (hold_args[i][0] == '=' || ft_isdigit(hold_args[i][0]) == 1)
+			{
+				printf("minishell: export: `%s': not a valid identifier\n", hold_args[i]);
+				return (-1);
+			}
+			else if (hold_args[i][j] == '=')
+				flag = 1;
+			j++;
+		}
+		if (flag == 0)
+			return (-1);
+		flag = 0;
+		i++;
+	}
+	return (0);
+}
+
 char	*ft_strdup_2(const char *src)
 {
 	char	*dest;
@@ -41,35 +72,18 @@ char	*ft_strdup_2(const char *src)
 	return (dest);
 }
 
-int	check_args(char **hold_args)
+int	ft_isalnum2(char	*str)
 {
 	int	i;
-	int	j;
-	int	flag;
 
 	i = 0;
-	j = 0;
-	flag = 0;
-	while (hold_args[i])
+	while (str[i] && str[i] != '=')
 	{
-		j = 0;
-		while (hold_args[i][j])
-		{
-			if (hold_args[i][0] == '=' || ft_isdigit(hold_args[i][0]) == 1)
-			{
-				printf("export: `%s': not a valid identifier\n", hold_args[i]);
-				return (-1);
-			}
-			else if (hold_args[i][j] == '=')
-				flag = 1;
-			j++;
-		}
-		if (flag == 0)
-			return (-1);
-		flag = 0;
+		if (ft_isalnum(str[i]) == 1)
+			return (1);
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 int	 ft_strcharcmp(char *s1, const char *s2, char c)

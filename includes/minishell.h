@@ -140,13 +140,15 @@ int				cmd_not_found(char *str);
 // ----------------------------------------------//
 
 //------------------EXECUTOR---------------------//
+void			free_tmp(t_utils_hold *utils_tmp);
 int				send_heredoc(t_utils_hold *utils_hold, t_simple_cmds *cmd);
 char			*generate_heredoc_filename(void);
 int				ft_heredoc(t_utils_hold *utils_hold, t_lexer *heredoc,
 					char *file_name);
 char			*delete_quotes(char *str, char c);
-int				create_heredoc(t_lexer *heredoc, bool quotes,
-					t_utils_hold *utils_hold, char *file_name);
+int				create_heredoc(bool quotes,
+					t_lexer *tmp, char *file_name);
+int	check_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold);
 char			*check_dollar_sign(t_utils_hold *utils_hold, char *str);
 size_t			dollar_sign(char *str);
 int				handle_digit_after_dollar(int j, char *str);

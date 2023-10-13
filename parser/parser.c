@@ -251,7 +251,7 @@ int	parser(t_utils_hold *utils_hold)
 
 	utils_hold->simple_cmds = NULL;
 	if (utils_hold->lexer_list->token == 1)
-		return (printf("Pipe cant be first\n"));
+		return (ft_error(0, utils_hold));
 	while (utils_hold->lexer_list)
 	{
 		if (utils_hold->lexer_list->token == 1)

@@ -5,6 +5,7 @@ int	cmd_not_found(char *str)
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(str, STDERR_FILENO);
 	ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	g_global.exit_code = 127;
 	return (-1);
 }
 
@@ -25,6 +26,7 @@ char	*join_split_str(char **split_str, char *new_str)
 		free(add_space);
 		i++;
 	}
+
 	new_str = tmp;
 	return (new_str);
 }
@@ -42,7 +44,6 @@ char	**resplit_str(char **double_arr)
 	free_array(ret);
 	ret = ft_split(joined_str, ' ');
 	free(joined_str);
-	printf("ret[0] = %s\n", ret[0]);
 	return (ret);
 }
 
@@ -59,6 +60,30 @@ void	free_lexer(t_lexer *redirections)
 		free(current);
 		current = next;
 	}
+}
+
+int	check_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
+{
+	int		i;
+	char	*mycmd;
+
+	i = 0;
+	cmd->str = resplit_str(cmd->str);
+	if (!access(cmd->str[0], F_OK))
+		return (0);
+	while (utils_hold->paths[i])
+	{
+		mycmd = ft_strjoin(utils_hold->paths[i], cmd->str[0]);
+		if (!access(mycmd, F_OK))
+		{
+			free(mycmd);
+			return (0);
+		}
+		free(mycmd);
+		i++;
+	}
+	cmd_not_found(cmd->str[0]);;
+	return (1);
 }
 
 int	find_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
@@ -101,7 +126,7 @@ int	handle_infile(char *file)
 {
 	int	fd;
 
-	printf("file = %s\n", file);
+
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
@@ -123,7 +148,7 @@ int	handle_outfile(t_lexer *redirection, char *file)
 {
 	int	fd;
 
-	printf("file = %s\n", file);
+
 	fd = check_append_outfile(redirection, file);
 	if (fd < 0)
 	{
@@ -181,18 +206,36 @@ int	check_redirections(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 			if (handle_outfile(cmd->redirections, tmp->next->str))
 				return (1);
 		}
-		else if (cmd->redirections->token == 5)
-		{
-			while (tmp->token != 5)
-				tmp = tmp->next;
-			if (handle_infile(tmp->next->str))
-				return (1);
-		}
 		cmd->redirections = cmd->redirections->next;
 	}
-	
 	free_tmp(&utils_tmp);
 	cmd->redirections = start;
+	return (0);
+}
+
+int	ft_envplen(char	*envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i] != '\0' && envp[i] != '=')
+		i++;
+	return (i);
+}
+
+int	ft_envpcmp(char *envp, char *env_name)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i] != '\0' && envp[i] != '=')
+	{
+		if (envp[i] != env_name[i])
+			return (1);
+		i++;
+	}
+	if (env_name[i] != '\0')
+		return (1);
 	return (0);
 }
 
@@ -203,11 +246,13 @@ char	*get_env_value(char *env_name, char **envp)
 	i = 0;
 	if (!env_name)
 		return (NULL);
+	if (env_name[0] == '$')
+		return (ft_strdup("$"));
 	if (env_name[0] == '?')
 		return (ft_itoa(g_global.exit_code));
 	while (envp[i])
 	{
-		if (!ft_strncmp(envp[i], env_name, ft_strlen(env_name)))
+		if (!ft_envpcmp(envp[i], env_name))
 			return (ft_strdup(envp[i] + ft_strlen(env_name) + 1));
 		i++;
 	}
@@ -226,6 +271,7 @@ void	clean_exit(t_utils_hold *utils_hold, int exit_code)
 		free(current);
 		current = next;
 	}
+	ft_simple_cmdsclear(&utils_hold->simple_cmds);
 	free(utils_hold->args);
 	free(utils_hold->pwd);
 	free(utils_hold->old_pwd);
@@ -258,20 +304,18 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 	{
 		if (check_redirections(cmd, utils_hold))
 		{
-			clean_exit(utils_hold, exit_code);
 			perror("error");
+			clean_exit(utils_hold, exit_code);
 		}
 	}
 	free(utils_hold->args);
 	utils_hold->args = join_split_str(cmd->str, NULL);
 	if (cmd->str[0][0] != '\0' && check_builtins(utils_hold) == 1)
-	{
 		which_command(utils_hold);
-		if (cmd->str)
-			free_array(cmd->str);
-	}
 	else if (cmd->str[0][0] != '\0')
 		exit_code = find_cmd(cmd, utils_hold);
+	if (cmd->hd_file_name)
+		free(cmd->hd_file_name);
 	free_array(utils_hold->envp);
 	clean_exit(utils_hold, exit_code);
 }

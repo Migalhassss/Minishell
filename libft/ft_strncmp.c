@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-
+#include <stdio.h>
 int	ft_strncmp(const char *s1, char *s2, size_t n)
 {
 	while (n > 0 && *s1 != '\0' && *s1 == *s2)
