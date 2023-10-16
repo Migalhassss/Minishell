@@ -55,6 +55,7 @@ void	free_lexer(t_lexer *redirections)
 	current = redirections;
 	while (current)
 	{
+		printf("current->str: %s\n", current->str);
 		next = current->next;
 		free(current->str);
 		free(current);
@@ -105,7 +106,6 @@ int	find_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 		i++;
 	}
 	cmd_not_found(cmd->str[0]);
-	free_array(cmd->str);
 	return (-1);
 }
 

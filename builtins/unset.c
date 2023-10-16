@@ -12,65 +12,6 @@
 
 #include "../includes/minishell.h"
 
-char	*ft_strdup2(const char *src, char c)
-{
-	char	*dest;
-	int		i;
-	int		len;
-
-	len = 0;
-	while (src[len] != '\0')
-		len++;
-	i = 0;
-	dest = (char *)malloc(len * sizeof(char) + 2);
-	if (!dest)
-		return (0);
-	while (src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = c;
-	i++;
-	dest[i] = '\0';
-	return (dest);
-}
-
-int	ft_strcharcmp2(char *s1, const char *s2, char c)
-{
-	int		i;
-	int		flag;
-	char	*new_s1;
-
-	i = 0;
-	flag = 0;
-	if (s1[ft_strlen(s1)] == c)
-	{
-		free(s1);
-		return (1);
-	}
-	else
-	{
-		new_s1 = ft_strdup2(s1, c);
-		s1 = new_s1;
-	}
-	while (s1[i] && s2[i] && s1[i] != c && s2[i] != c)
-	{
-		if (s1[i] != s2[i])
-		{
-			free(new_s1);
-			return (0);
-		}
-		i++;
-	}	
-	if (s1[i] == c && s2[i] == c)
-		flag = 1;
-	free(new_s1);
-	if (flag == 1)
-		return (1);
-	return (0);
-}
-
 int	check_if_exists_helper2(char *str, t_utils_hold *utils_hold)
 {
 	int	i;
@@ -120,7 +61,7 @@ char	**dup_array(t_utils_hold *utils_hold, int j)
 		if (i == j)
 			i++;
 		if (utils_hold->envp[i] != NULL)
-				dup_envp[k] = ft_strdup(utils_hold->envp[i]);
+			dup_envp[k] = ft_strdup(utils_hold->envp[i]);
 		else
 			return (dup_envp);
 		k++;
@@ -140,21 +81,13 @@ int	check_args1(char **hold_args)
 	i = 0;
 	j = 0;
 	flag = 0;
-	if (ft_strchr(hold_args[0], '=') != NULL)
-	{
-		printf("minishell: export: `%s': not a valid identifier\n", hold_args[0]);
-		return (-1);
-	}
 	while (hold_args[i])
 	{
 		j = 0;
+		if (checkerror_identifier(hold_args[i]) == 1)
+			return (-1);
 		while (hold_args[i][j])
 		{
-			if (ft_isdigit(hold_args[i][0]) == 1)
-			{
-				printf("minishell: export: `%s': not a valid identifier\n", hold_args[i]);
-				return (-1);
-			}
 			else if (hold_args[i][j] == '=')
 				flag = 1;
 			j++;
@@ -169,20 +102,19 @@ int	check_args1(char **hold_args)
 
 int	ft_unset(t_utils_hold *utils_hold)
 {
-	int		j;
 	int		i;
 	char	**hold_args;
 	char	**dup_envp;
 
-	j = 0;
 	i = 0;
 	hold_args = ft_split(utils_hold->args, ' ');
-	if (check_args1(hold_args) == 0 && check_if_exists2(hold_args, utils_hold) != -1)
+	if (!check_args1(hold_args)
+		&& check_if_exists2(hold_args, utils_hold) != -1)
 	{
 		while (hold_args[i])
 		{
-			j = check_if_exists2(hold_args, utils_hold);
-			dup_envp = dup_array(utils_hold, j);
+			dup_envp = dup_array(utils_hold,
+					check_if_exists2(hold_args, utils_hold););
 			utils_hold->envp = dup_envp;
 			i++;
 		}

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/16 17:01:22 by micarrel          #+#    #+#             */
+/*   Updated: 2023/10/16 17:01:22 by micarrel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 int	check_n(char *args)
@@ -15,43 +27,6 @@ int	check_n(char *args)
 			return (i);
 	}
 	return (-1);
-}
-
-// void	print_env(t_utils_hold *utils_hold, int *i)
-// {
-// 	int		j;
-// 	char 	*env_value;
-// 	char	*tmp;
-
-// 	j = *i + 1;
-// 	while (utils_hold->args[j] && utils_hold->args[j] != ' '
-// 			&& utils_hold->args[j] != '\'' && utils_hold->args[j] != '"')
-// 		j++;
-// 	env_value = ft_substr(utils_hold->args, *i + 1, j - 1);
-// 	tmp = get_env_value(env_value, utils_hold->envp);
-// 	ft_putstr_fd(tmp, 1);
-// 	(*i) += ft_strlen(env_value);
-// 	free(tmp);
-// 	free(env_value);
-// }
-
-
-void	printnopipe(char	*str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '|')
-			return ;
-		else if (str[i] == '<')
-			return ;
-		else if (str[i] == '>')
-			return ;
-		ft_putchar_fd(str[i], 1);
-		i++;
-	}
 }
 
 void	print_args(char	*args)

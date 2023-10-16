@@ -12,6 +12,16 @@
 
 #include "../includes/minishell.h"
 
+int	ft_arrlen(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
+}
+
 void	free_utils_hold(t_utils_hold *utils_hold)
 {
 	ft_simple_cmdsclear(&utils_hold->simple_cmds);
