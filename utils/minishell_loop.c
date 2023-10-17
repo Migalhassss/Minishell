@@ -36,6 +36,9 @@ void	ft_simple_cmdsclear(t_simple_cmds **lst)
 
 	if (!*lst)
 		return ;
+	if ((*lst)->prev != NULL)
+		while ((*lst)->prev)
+			*lst = (*lst)->prev;
 	while (*lst)
 	{
 		tmp = (*lst)->next;
@@ -100,7 +103,7 @@ char	*exit_code(t_utils_hold *utils_hold)
 	char	*tmp;
 
 	(void) utils_hold;
-	tmp = ft_itoa(g_global.exit_code);
+	tmp = ft_itoa(utils_hold->exit_code);
 	return (tmp);
 }
 
@@ -193,39 +196,39 @@ int	check_if_onlydollar(char *args, int i)
 	return (0);
 }
 
-char	*replace_env_vars(char *args, char **envp)
+char	*replace_env_vars(t_utils_hold *utils_hold)
 {
 	char	*var_name;
 	char	*var_value;
 	int		i;
 	bool	in_quotes;
 
-	if (ft_strchr(args, '$') == NULL)
-		return (args);
+	if (ft_strchr(utils_hold->args, '$') == NULL)
+		return (utils_hold->args);
 	i = 0;
 	in_quotes = false;
-	while (args[i] != '\0')
+	while (utils_hold->args[i] != '\0')
 	{	
-		if (args[i] == '\"')
+		if (utils_hold->args[i] == '\"')
 			in_quotes = !in_quotes;
-		if (args[i] == '\'' && in_quotes == false)
+		if (utils_hold->args[i] == '\'' && in_quotes == false)
 		{	
 			i++;
-			while (args[i] != '\'')
+			while (utils_hold->args[i] != '\'')
 				i++;
 		}
-		if (args[i] == '$' && check_if_onlydollar(args, i) == 1)
+		if (utils_hold->args[i] == '$' && check_if_onlydollar(utils_hold->args, i) == 1)
 		{
-			var_name = take_var_name(args, i);
-			var_value = get_env_value(var_name, envp);
-			args = detect_dollar_sigs(args, var_value, var_name, &i);
+			var_name = take_var_name(utils_hold->args, i);
+			var_value = get_env_value(var_name, utils_hold);
+			utils_hold->args = detect_dollar_sigs(utils_hold->args, var_value, var_name, &i);
 			free(var_name);
 			i--;
 		}
 		i++;
 	}
-	args[i] = '\0';
-	return (args);
+	utils_hold->args[i] = '\0';
+	return (utils_hold->args);
 }
 
 void	free_lexer_list(t_utils_hold *utils_hold)
@@ -261,7 +264,7 @@ int	minishell_loop(t_utils_hold *utils_hold)
 	if (ft_strlen(utils_hold->args) == 0)
 		reset_utils_hold(utils_hold);
 	add_history(utils_hold->args);
-	utils_hold->args = replace_env_vars(utils_hold->args, utils_hold->envp);
+	utils_hold->args = replace_env_vars(utils_hold);
 	if (count_quotes(utils_hold) == 1)
 		return (ft_error(2, utils_hold));
 	if (ft_strlen(utils_hold->args) == 0)

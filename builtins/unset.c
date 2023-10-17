@@ -81,14 +81,14 @@ int	check_args1(char **hold_args)
 	i = 0;
 	j = 0;
 	flag = 0;
+	if (checkerror_identifier(hold_args) == 1)
+		return (-1);
 	while (hold_args[i])
 	{
 		j = 0;
-		if (checkerror_identifier(hold_args[i]) == 1)
-			return (-1);
 		while (hold_args[i][j])
 		{
-			else if (hold_args[i][j] == '=')
+			if (hold_args[i][j] == '=')
 				flag = 1;
 			j++;
 		}
@@ -114,7 +114,7 @@ int	ft_unset(t_utils_hold *utils_hold)
 		while (hold_args[i])
 		{
 			dup_envp = dup_array(utils_hold,
-					check_if_exists2(hold_args, utils_hold););
+					check_if_exists2(hold_args, utils_hold));
 			utils_hold->envp = dup_envp;
 			i++;
 		}

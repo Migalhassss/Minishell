@@ -175,6 +175,7 @@ t_simple_cmds	*ft_simple_cmdsnew(char **str, int num_redirections,
 	if (!new_node)
 		return (NULL);
 	new_node->str = str;
+	printf("str[0] = %s\n", str[0]);
 	new_node->builtin = 0;
 	new_node->hd_file_name = NULL;
 	new_node->num_redirections = num_redirections;

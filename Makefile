@@ -8,8 +8,11 @@ FILES	=	main.c 							\
 			builtins/pwd.c					\
 			builtins/env.c					\
 			builtins/export.c				\
+			builtins/export_utils.c			\
 			builtins/unset.c				\
+			builtins/unset_utils.c			\
 			builtins/cd.c					\
+			builtins/cd_utils.c				\
 			utils/utils.c					\
 			utils/parse_envp.c				\
 			utils/minishell_loop.c			\

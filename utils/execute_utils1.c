@@ -1,11 +1,11 @@
 #include "../includes/minishell.h"
 
-int	cmd_not_found(char *str)
+int	cmd_not_found(char *str, t_utils_hold *utils_hold)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(str, STDERR_FILENO);
 	ft_putstr_fd(": command not found\n", STDERR_FILENO);
-	g_global.exit_code = 127;
+	utils_hold->exit_code = 127;
 	return (-1);
 }
 
@@ -83,7 +83,7 @@ int	check_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 		free(mycmd);
 		i++;
 	}
-	cmd_not_found(cmd->str[0]);;
+	cmd_not_found(cmd->str[0], utils_hold);
 	return (1);
 }
 
@@ -105,7 +105,7 @@ int	find_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 		free(mycmd);
 		i++;
 	}
-	cmd_not_found(cmd->str[0]);
+	cmd_not_found(cmd->str[0], utils_hold);
 	return (-1);
 }
 
@@ -239,7 +239,7 @@ int	ft_envpcmp(char *envp, char *env_name)
 	return (0);
 }
 
-char	*get_env_value(char *env_name, char **envp)
+char	*get_env_value(char *env_name, t_utils_hold *utils_hold)
 {
 	int		i;
 
@@ -249,11 +249,11 @@ char	*get_env_value(char *env_name, char **envp)
 	if (env_name[0] == '$')
 		return (ft_strdup("$"));
 	if (env_name[0] == '?')
-		return (ft_itoa(g_global.exit_code));
-	while (envp[i])
+		return (ft_itoa(utils_hold->exit_code));
+	while (utils_hold->envp[i])
 	{
-		if (!ft_envpcmp(envp[i], env_name))
-			return (ft_strdup(envp[i] + ft_strlen(env_name) + 1));
+		if (!ft_envpcmp(utils_hold->envp[i], env_name))
+			return (ft_strdup(utils_hold->envp[i] + ft_strlen(env_name) + 1));
 		i++;
 	}
 	return (ft_strdup(""));

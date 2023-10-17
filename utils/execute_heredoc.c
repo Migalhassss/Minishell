@@ -30,7 +30,7 @@ int	ft_fork(t_utils_hold *utils_hold, int end[2], int fd_in, t_simple_cmds *cmd)
 	return (0);
 }
 
-int	pipe_wait(int *pid, int amount)
+int	pipe_wait(int *pid, int amount, t_utils_hold *utils_hold)
 {
 	int	i;
 	int	status;
@@ -43,7 +43,7 @@ int	pipe_wait(int *pid, int amount)
 	}
 	waitpid(pid[i], &status, 0);
 	if (WIFEXITED(status))
-		g_global.exit_code = WEXITSTATUS(status);
+		utils_hold->exit_code = WEXITSTATUS(status);
 	return (0);
 }
 
@@ -134,7 +134,7 @@ int	executor(t_utils_hold *utils_hold)
 		else
 			break ;
 	}
-	pipe_wait(utils_hold->pid, utils_hold->pipes);
+	pipe_wait(utils_hold->pid, utils_hold->pipes, utils_hold);
 	utils_hold->simple_cmds = ft_simple_cmdsfirst(utils_hold->simple_cmds);
 	return (0);
 }

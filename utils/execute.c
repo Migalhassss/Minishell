@@ -15,19 +15,19 @@
 void	execute_command(char *cmd, t_utils_hold *utils_hold)
 {
 	if (!ft_strcmp(cmd, "echo"))
-		g_global.exit_code = ft_echo(utils_hold);
+		utils_hold->exit_code = ft_echo(utils_hold);
 	else if (!ft_strcmp(cmd, "exit"))
-		g_global.exit_code = ft_exit(utils_hold);
+		utils_hold->exit_code = ft_exit(utils_hold);
 	else if (!ft_strcmp(cmd, "pwd"))
-		g_global.exit_code = ft_pwd(utils_hold);
+		utils_hold->exit_code = ft_pwd(utils_hold);
 	else if (!ft_strcmp(cmd, "env"))
-		g_global.exit_code = ft_env(utils_hold);
+		utils_hold->exit_code = ft_env(utils_hold);
 	else if (!ft_strcmp(cmd, "export"))
-		g_global.exit_code = ft_export(utils_hold);
+		utils_hold->exit_code = ft_export(utils_hold);
 	else if (!ft_strcmp(cmd, "unset"))
-		g_global.exit_code = ft_unset(utils_hold);
+		utils_hold->exit_code = ft_unset(utils_hold);
 	else if (!ft_strcmp(cmd, "cd"))
-		g_global.exit_code = ft_cd(utils_hold);
+		utils_hold->exit_code = ft_cd(utils_hold);
 	return ;
 }
 
@@ -85,7 +85,7 @@ void	single_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 		handle_cmd(cmd, utils_hold);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
-		g_global.exit_code = WEXITSTATUS(status);
+		utils_hold->exit_code = WEXITSTATUS(status);
 }
 
 int	prepare_executor(t_utils_hold *utils_hold)

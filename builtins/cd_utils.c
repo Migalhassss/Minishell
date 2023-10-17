@@ -3,14 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jabreu-d <jabreu-d@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 18:38:04 by jabreu-d          #+#    #+#             */
-/*   Updated: 2023/10/13 23:33:12 by jabreu-d         ###   ########.fr       */
+/*   Updated: 2023/10/17 12:16:44 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	update_oldpwd(t_utils_hold *utils_hold)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (utils_hold->envp[i++])
+	{
+		if (ft_strcharcmp2(utils_hold->envp[i], "OLDPWD=", '='))
+		{
+			tmp = ft_strdup(utils_hold->envp[i] + 7);
+			free(utils_hold->envp[i]);
+			utils_hold->envp[i] = ft_strjoin("OLDPWD=", utils_hold->pwd);
+			free(tmp);
+			break ;
+		}
+	}
+}
 
 void	update_pwd(t_utils_hold *utils_hold)
 {
@@ -32,24 +51,6 @@ void	update_pwd(t_utils_hold *utils_hold)
 	update_oldpwd(utils_hold);
 }
 
-void	update_oldpwd(t_utils_hold *utils_hold)
-{
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	while (utils_hold->envp[i++])
-	{
-		if (ft_strcharcmp2(utils_hold->envp[i], "OLDPWD=", '='))
-		{
-			tmp = ft_strdup(utils_hold->envp[i] + 7);
-			free(utils_hold->envp[i]);
-			utils_hold->envp[i] = ft_strjoin("OLDPWD=", utils_hold->pwd);
-			free(tmp);
-			break ;
-		}
-	}
-}
 
 int	check_n_args(t_utils_hold *utils_hold)
 {
@@ -68,21 +69,27 @@ int	check_n_args(t_utils_hold *utils_hold)
 
 int	check_cd_args(t_utils_hold *utils_hold)
 {
-	if (check_n_args(utils_hold) == -1)
+if (check_n_args(utils_hold) == -1)
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		return (-1);
 	}
 	else if (utils_hold->args[0] == '~' && utils_hold->args[1] == '\0')
+	{
 		if (cd_home(utils_hold) == -1)
 			return (-1);
+	}
 	else if (utils_hold->args[0] == '-' && utils_hold->args[1] == '\0')
+	{
 		if (cd_minus(utils_hold) == -1)
 			return (-1);
+	}
 	else if (utils_hold->args[0] == '.' && utils_hold->args[1] == '.'
 		&& utils_hold->args[2] == '\0')
+	{
 		if (cd_dotdot(utils_hold) == -1)
 			return (-1);
+	}
 	else
 		if (cd_path(utils_hold) == -1)
 			return (-1);

@@ -138,6 +138,15 @@ int	quote_inlast(char *args)
 	return (0);
 }
 
+int	ifis_onlydouble_quotes(char *args, int i)
+{
+	if (args[i] == '\"' && args[i + 1] == '\"'
+		&& (args[i + 2] == '\0' || args[i + 2] == ' ')
+		&& (args[i - 1] == ' ' || args[i - 1] == '\0'))
+		return (1);
+	return (0);
+}
+
 void	remove_quotes(t_utils_hold *utils_hold)
 {
 	char				*tmp;
@@ -152,8 +161,10 @@ void	remove_quotes(t_utils_hold *utils_hold)
 	{
 		if (tmp[i] && tmp[i] == '\"')
 		{
+			if (ifis_onlydouble_quotes(tmp, i) == 1)
+				tmp = remove_this_char(tmp, i);
 			tmp = remove_this_char(tmp, i);
-			if (i > ft_strlen(tmp) || ft_strlen(tmp) == 0 || !tmp[i])
+			if (i > ft_strlen(tmp) || !ft_strlen(tmp) || !tmp[i])
 				break ;
 			in_quotes = !in_quotes;
 		}

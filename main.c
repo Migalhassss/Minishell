@@ -39,10 +39,11 @@ int	main(int ac, char **av, char **envp)
 		exit(0);
 	}
 	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 	utils.envp = ft_envpdup(envp);
 	pwd_find(&utils);
 	implement_utils_hold(&utils);
 	// printf("\n%s\n\n", "Welcome to minishell!");
-	g_global.exit_code = 0;
+	utils.exit_code = 0;
 	minishell_loop(&utils);
 }

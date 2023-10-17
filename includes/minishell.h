@@ -57,6 +57,7 @@ typedef struct s_utils_hold
 	bool					heredoc;
 	bool					reset;
 	int						index_list;
+	int						exit_code;
 }	t_utils_hold;
 
 typedef struct s_simple_cmds
@@ -75,7 +76,6 @@ typedef struct s_global
 	int	in_cmd;
 	int	in_heredoc;
 	int	stop_heredoc;
-	int	exit_code;
 }	t_global;
 
 extern t_global	g_global;
@@ -136,7 +136,7 @@ void			handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold);
 int				find_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold);
 char			**resplit_str(char **double_arr);
 char			*join_split_str(char **split_str, char *new_str);
-int				cmd_not_found(char *str);
+int				cmd_not_found(char *str, t_utils_hold *utils_hold);
 // ----------------------------------------------//
 
 //------------------EXECUTOR---------------------//
@@ -148,7 +148,7 @@ int				ft_heredoc(t_utils_hold *utils_hold, t_lexer *heredoc,
 char			*delete_quotes(char *str, char c);
 int				create_heredoc(bool quotes,
 					t_lexer *tmp, char *file_name);
-int	check_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold);
+int				check_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold);
 char			*check_dollar_sign(t_utils_hold *utils_hold, char *str);
 size_t			dollar_sign(char *str);
 int				handle_digit_after_dollar(int j, char *str);
@@ -165,7 +165,7 @@ void			dup_cmd(t_simple_cmds *cmd,
 					t_utils_hold *utils_hold, int end[2], int fd_in);
 int				check_fd_heredoc(t_utils_hold *utils_hold,
 					int end[2], t_simple_cmds *cmd);
-int				pipe_wait(int *pid, int amount);
+int				pipe_wait(int *pid, int amount, t_utils_hold *utils_hold);
 t_simple_cmds	*ft_simple_cmdsfirst(t_simple_cmds *map);
 // ----------------------------------------------//
 
@@ -219,6 +219,7 @@ void			update_envp(char *hold_args, t_utils_hold *utils_hold);
 int				check_if_exists3(char *hold_arg, t_utils_hold *utils_hold);
 int				check_if_exists_helper2(char *str, t_utils_hold *utils_hold);
 int				ft_arrlen(char **arr);
+char			*ft_strdup_2(const char *src);
 void			add_envp(char *hold_args, t_utils_hold *utils_hold, int arrlen);
 // ------------------------------//
 
@@ -227,6 +228,7 @@ int				ft_unset(t_utils_hold *utils_hold);
 int				check_if_exists2(char **hold_args, t_utils_hold *utils_hold);
 char			**dup_array(t_utils_hold *utils_hold, int j);
 char			*ft_strdup2(const char *src, char c);
+int			checkerror_identifier(char **hold_args);
 // ------------------------------//
 
 // --------------EXIT-------------//
@@ -234,7 +236,7 @@ int				ft_exit(t_utils_hold *utils_hold);
 void			free_utils_hold(t_utils_hold *utils_hold);
 void			ft_simple_cmdsclear(t_simple_cmds **lst);
 // ------------------------------//
-char			*get_env_value(char *env_name, char **envp);
+char			*get_env_value(char *env_name, t_utils_hold *utils_hold);
 void			print_env(t_utils_hold *utils_hold, int *i);
 int				check_redirections(t_simple_cmds *cmd, t_utils_hold *utils_hold	);
 void			clean_exit(t_utils_hold *utils_hold, int exit_code);

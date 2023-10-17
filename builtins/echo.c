@@ -29,11 +29,8 @@ int	check_n(char *args)
 	return (-1);
 }
 
-void	print_args(char	*args)
+void	print_args(char	*args, int i)
 {
-	int	i;
-
-	i = 0;
 	while (args[i])
 	{
 		if (args[i] == '|')
@@ -55,8 +52,8 @@ int	ft_echo(t_utils_hold *utils_hold)
 	i = 0;
 	n_flag = check_n(utils_hold->args);
 	if (n_flag != -1)
-		i = n_flag;
-	print_args(utils_hold->args);
+		i = n_flag + 1;
+	print_args(utils_hold->args, i);
 	while (utils_hold->args[i] == ' ')
 		i++;
 	if (n_flag == -1)

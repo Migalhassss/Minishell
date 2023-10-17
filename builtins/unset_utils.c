@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 18:49:47 by jabreu-d          #+#    #+#             */
-/*   Updated: 2023/10/16 17:22:17 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/17 13:57:09 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,19 +65,19 @@ int	ft_strcharcmp2(char *s1, const char *s2, char c)
 	return (0);
 }
 
-void	checkerror_identifier(char **hold_args)
+int	checkerror_identifier(char **hold_args)
 {
 	int	i;
 	int	j;
 
-	i = 0;
-	if (ft_strchr(hold_args[0], '=') != NULL)
+	i = -1;
+	if (ft_strchr(hold_args[1], '=') != NULL)
 	{
 		printf("minishell: export: `%s': not a valid identifier\n",
 			hold_args[i]);
 		return (-1);
 	}
-	while (hold_args[i])
+	while (hold_args[++i])
 	{
 		j = 0;
 		while (hold_args[i][j])
@@ -90,6 +90,6 @@ void	checkerror_identifier(char **hold_args)
 			}
 			j++;
 		}
-		i++;
 	}
+	return (0);
 }
