@@ -88,6 +88,11 @@ int	ft_export(t_utils_hold *utils_hold)
 	i = 0;
 	if (utils_hold->args[0] == '\0')
 		return (1);
+	if (ft_strlen(utils_hold->args) == 0)
+	{
+		ft_full_env(utils_hold);
+		return (0);
+	}
 	hold_args = ft_split(utils_hold->args, ' ');
 	if (check_args(hold_args) == -1)
 	{

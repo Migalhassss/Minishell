@@ -219,6 +219,7 @@ void			update_envp(char *hold_args, t_utils_hold *utils_hold);
 int				check_if_exists3(char *hold_arg, t_utils_hold *utils_hold);
 int				check_if_exists_helper2(char *str, t_utils_hold *utils_hold);
 int				ft_arrlen(char **arr);
+void			ft_full_env(t_utils_hold *utils_hold);
 char			*ft_strdup_2(const char *src);
 void			add_envp(char *hold_args, t_utils_hold *utils_hold, int arrlen);
 // ------------------------------//

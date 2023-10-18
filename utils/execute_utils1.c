@@ -55,7 +55,6 @@ void	free_lexer(t_lexer *redirections)
 	current = redirections;
 	while (current)
 	{
-		printf("current->str: %s\n", current->str);
 		next = current->next;
 		free(current->str);
 		free(current);
@@ -126,7 +125,6 @@ int	handle_infile(char *file)
 {
 	int	fd;
 
-
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
@@ -147,7 +145,6 @@ int	handle_infile(char *file)
 int	handle_outfile(t_lexer *redirection, char *file)
 {
 	int	fd;
-
 
 	fd = check_append_outfile(redirection, file);
 	if (fd < 0)
@@ -190,21 +187,24 @@ int	check_redirections(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 	tmp = utils_tmp.lexer_list;
 	while (cmd->redirections)
 	{
+
 		if (cmd->redirections->token == 3)
 		{
-			while (tmp->token != 3)
+			while (tmp && tmp->token != 3)
 				tmp = tmp->next;
 			if (handle_infile(tmp->next->str))
 				return (1);
+			tmp = tmp->next;
 		}
 		else if (cmd->redirections->token == 2
 			|| cmd->redirections->token == 4)
 		{
-			while (tmp->token != 2
+			while (tmp && tmp->token != 2
 				&& tmp->token != 4)
-				tmp = tmp->next;
+					tmp = tmp->next;
 			if (handle_outfile(cmd->redirections, tmp->next->str))
 				return (1);
+			tmp = tmp->next;
 		}
 		cmd->redirections = cmd->redirections->next;
 	}

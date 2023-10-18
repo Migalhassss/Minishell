@@ -139,7 +139,6 @@ int	token_reader(t_utils_hold *utils_hold)
 
 	i = 0;
 	utils_hold->lexer_list = NULL;
-	printf("args = %s\n", utils_hold->args);
 	if (ft_strlen(utils_hold->args) == 0)
 		return (0);
 	if (ft_strchr(utils_hold->args, '|') && check_pipes(utils_hold))

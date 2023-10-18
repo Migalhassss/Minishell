@@ -39,7 +39,7 @@ int	main(int ac, char **av, char **envp)
 		exit(0);
 	}
 	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
+	// signal(SIGQUIT, SIG_IGN);
 	utils.envp = ft_envpdup(envp);
 	pwd_find(&utils);
 	implement_utils_hold(&utils);

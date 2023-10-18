@@ -12,6 +12,24 @@
 
 #include "../includes/minishell.h"
 
+void	ft_full_env(t_utils_hold *utils_hold)
+{
+	int	i;
+
+	i = 0;
+	printf("full env\n");
+	while (utils_hold->envp[i])
+	{
+		if (utils_hold->envp[i] && utils_hold->envp[i][0] != '\0')
+		{
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd(utils_hold->envp[i], 1);
+			ft_putchar_fd('\n', 1);
+		}
+		i++;
+	}
+}
+
 int	ft_env(t_utils_hold *utils_hold)
 {
 	int	i;
@@ -26,8 +44,10 @@ int	ft_env(t_utils_hold *utils_hold)
 	}
 	while (utils_hold->envp[i])
 	{
-		if (utils_hold->envp[i] && utils_hold->envp[i][0] != '\0')
+		if (ft_strchr(utils_hold->envp[i], '=') &&
+			utils_hold->envp[i] && utils_hold->envp[i][0] != '\0')
 		{
+
 			ft_putstr_fd(utils_hold->envp[i], 1);
 			ft_putchar_fd('\n', 1);
 		}
