@@ -20,7 +20,15 @@ int	check_if_exists_helper2(char *str, t_utils_hold *utils_hold)
 	while (utils_hold->envp[i])
 	{
 		if (ft_strcharcmp2(str, utils_hold->envp[i], '=') == 1)
+		{
+			printf("i 1 = %d\n", i);
 			return (i);
+		}
+		else if (ifexists_without_value(utils_hold->envp[i], str) == 0)
+		{
+			printf("i 2 = %d\n", i);
+			return (i);
+		}
 		i++;
 	}
 	return (-1);

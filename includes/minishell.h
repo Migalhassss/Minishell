@@ -211,6 +211,7 @@ int				ft_pwd(t_utils_hold *utils_hold);
 // ------------------------------//
 
 // --------------EXPORT-----------//
+int				ifexists_without_value(char *evnp, char *str);
 int				ft_export(t_utils_hold *utils_hold);
 int				check_args(char **hold_args);
 int				check_if_exists_helper(char *str, t_utils_hold *utils_hold);

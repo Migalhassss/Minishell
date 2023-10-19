@@ -41,7 +41,6 @@ int	ft_exit(t_utils_hold *utils_hold)
 {
 	free_utils_hold(utils_hold);
 	rl_clear_history();
-	printf("%d", utils_hold->exit_code);
 	printf("Exiting minishell...\n");
 	exit(0);
 	return (1);
