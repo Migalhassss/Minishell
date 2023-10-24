@@ -17,7 +17,6 @@ void	print_list(t_lexer *lexer_list)
 	t_lexer	*tmp;
 
 	tmp = lexer_list;
-
 	while (tmp)
 	{
 		printf("Str = %s | ", tmp->str);
@@ -62,6 +61,40 @@ int	add_node(char *str, int token, t_lexer **lexer_list,
 " << " = 5
 */
 
+int	handle_check1(t_utils_hold *utils_hold, int i, int *j, t_lexer **lexer_list)
+{
+	if (utils_hold->args[i + (*j) + 1] == '>')
+	{
+		if (!add_node(ft_strdup(">>"), 4, lexer_list, utils_hold))
+			return (-1);
+		(*j) += 2;
+	}
+	else
+	{
+		if (!add_node(ft_strdup(">"), 2, lexer_list, utils_hold))
+			return (-1);
+		(*j)++;
+	}
+	return (0);
+}
+
+int	handle_check2(t_utils_hold *utils_hold, int i, int *j, t_lexer **lexer_list)
+{
+	if (utils_hold->args[i + (*j) + 1] == '<')
+	{
+		if (!add_node(ft_strdup("<<"), 4, lexer_list, utils_hold))
+			return (-1);
+		(*j) += 2;
+	}
+	else
+	{
+		if (!add_node(ft_strdup("<"), 2, lexer_list, utils_hold))
+			return (-1);
+		(*j)++;
+	}
+	return (0);
+}
+
 int	handle_token(t_utils_hold *utils_hold, int i, t_lexer **lexer_list)
 {
 	int	j;
@@ -76,33 +109,13 @@ int	handle_token(t_utils_hold *utils_hold, int i, t_lexer **lexer_list)
 	}
 	else if (utils_hold->args[i + j] == '<')
 	{
-		if (utils_hold->args[i + j + 1] == '<')
-		{
-			if (!add_node(ft_strdup("<<"), 5, lexer_list, utils_hold))
-				return (-1);
-			j += 2;
-		}
-		else
-		{
-			if (!add_node(ft_strdup("<"), 3, lexer_list, utils_hold))
-				return (-1);
-			j++;
-		}
+		if(handle_check2(utils_hold, i, &j, lexer_list) == -1)
+			return (-1);
 	}
 	else if (utils_hold->args[i + j] == '>')
 	{
-		if (utils_hold->args[i + j + 1] == '>')
-		{
-			if (!add_node(ft_strdup(">>"), 4, lexer_list, utils_hold))
-				return (-1);
-			j += 2;
-		}
-		else
-		{
-			if (!add_node(ft_strdup(">"), 2, lexer_list, utils_hold))
-				return (-1);
-			j++;
-		}
+		if (handle_check1(utils_hold, i, &j, lexer_list) == -1)
+			return (-1);
 	}
 	else
 		j++;
@@ -139,10 +152,6 @@ int	token_reader(t_utils_hold *utils_hold)
 
 	i = 0;
 	utils_hold->lexer_list = NULL;
-	if (ft_strlen(utils_hold->args) == 0)
-		return (0);
-	if (ft_strchr(utils_hold->args, '|') && check_pipes(utils_hold))
-		return (ft_error(0, utils_hold));
 	while (utils_hold->args[i])
 	{
 		if (utils_hold->args[i] == ' ')
@@ -179,5 +188,21 @@ int	token_reader(t_utils_hold *utils_hold)
 			i += j;
 		}
 	}
+	return (0);
+}
+
+int	token_reader(t_utils_hold *utils_hold)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	utils_hold->lexer_list = NULL;
+	if (ft_strlen(utils_hold->args) == 0)
+		return (0);
+	if (ft_strchr(utils_hold->args, '|') && check_pipes(utils_hold))
+		return (ft_error(0, utils_hold));
+	if (token_reader2(utils_hold) == 1)
+		return (1);
 	return (0);
 }

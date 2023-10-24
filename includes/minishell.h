@@ -230,7 +230,7 @@ int				ft_unset(t_utils_hold *utils_hold);
 int				check_if_exists2(char **hold_args, t_utils_hold *utils_hold);
 char			**dup_array(t_utils_hold *utils_hold, int j);
 char			*ft_strdup2(const char *src, char c);
-int			checkerror_identifier(char **hold_args);
+int				checkerror_identifier(char **hold_args);
 // ------------------------------//
 
 // --------------EXIT-------------//
@@ -240,7 +240,8 @@ void			ft_simple_cmdsclear(t_simple_cmds **lst);
 // ------------------------------//
 char			*get_env_value(char *env_name, t_utils_hold *utils_hold);
 void			print_env(t_utils_hold *utils_hold, int *i);
-int				check_redirections(t_simple_cmds *cmd, t_utils_hold *utils_hold	);
+int				check_redirections(t_simple_cmds *cmd,
+					t_utils_hold *utils_hold	);
 void			clean_exit(t_utils_hold *utils_hold, int exit_code);
 
 /*
