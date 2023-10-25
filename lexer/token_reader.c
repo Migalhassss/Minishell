@@ -82,13 +82,13 @@ int	handle_check2(t_utils_hold *utils_hold, int i, int *j, t_lexer **lexer_list)
 {
 	if (utils_hold->args[i + (*j) + 1] == '<')
 	{
-		if (!add_node(ft_strdup("<<"), 4, lexer_list, utils_hold))
+		if (!add_node(ft_strdup("<<"), 5, lexer_list, utils_hold))
 			return (-1);
 		(*j) += 2;
 	}
 	else
 	{
-		if (!add_node(ft_strdup("<"), 2, lexer_list, utils_hold))
+		if (!add_node(ft_strdup("<"), 3, lexer_list, utils_hold))
 			return (-1);
 		(*j)++;
 	}
@@ -145,7 +145,7 @@ int	check_pipes(t_utils_hold *utils_hold)
 	return (0);
 }
 
-int	token_reader(t_utils_hold *utils_hold)
+int	token_reader2(t_utils_hold *utils_hold)
 {
 	int		i;
 	int		j;
@@ -193,10 +193,6 @@ int	token_reader(t_utils_hold *utils_hold)
 
 int	token_reader(t_utils_hold *utils_hold)
 {
-	int		i;
-	int		j;
-
-	i = 0;
 	utils_hold->lexer_list = NULL;
 	if (ft_strlen(utils_hold->args) == 0)
 		return (0);

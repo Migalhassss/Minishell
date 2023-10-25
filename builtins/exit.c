@@ -12,6 +12,29 @@
 
 #include "../includes/minishell.h"
 
+int	check_max_long(char	*arg)
+{
+	int	i;
+
+	i = 0;
+	if (arg[i] == '-' || arg[i] == '+')
+		i = 1;
+	while (arg[i] == '0')
+		i++;
+	if (ft_strlen(arg) < 19)
+		return (1);
+	if (ft_strlen(arg) > 19)
+		return (0);
+	if (arg[0] == '-')
+	{
+		if (ft_strncmp(arg, "9223372036854775808", ft_strlen(arg)) > 0)
+			return (0);
+	}
+	else if (ft_strncmp(arg, "9223372036854775807", ft_strlen(arg)) > 0)
+		return (0);
+	return (1);
+}
+
 int	ft_arrlen(char **arr)
 {
 	int	i;
@@ -39,6 +62,8 @@ void	free_utils_hold(t_utils_hold *utils_hold)
 
 int	ft_exit(t_utils_hold *utils_hold)
 {
+	if (check_max_long(utils_hold->args) == 0)
+		printf("minishell: exit: %s: numeric argument required\n", utils_hold->args);
 	free_utils_hold(utils_hold);
 	rl_clear_history();
 	printf("Exiting minishell...\n");
