@@ -20,15 +20,9 @@ int	check_if_exists_helper2(char *str, t_utils_hold *utils_hold)
 	while (utils_hold->envp[i])
 	{
 		if (ft_strcharcmp2(str, utils_hold->envp[i], '=') == 1)
-		{
-			printf("i 1 = %d\n", i);
 			return (i);
-		}
 		else if (ifexists_without_value(utils_hold->envp[i], str) == 0)
-		{
-			printf("i 2 = %d\n", i);
 			return (i);
-		}
 		i++;
 	}
 	return (-1);
@@ -91,20 +85,6 @@ int	check_args1(char **hold_args)
 	flag = 0;
 	if (checkerror_identifier(hold_args) == 1)
 		return (-1);
-	while (hold_args[i])
-	{
-		j = 0;
-		while (hold_args[i][j])
-		{
-			if (hold_args[i][j] == '=')
-				flag = 1;
-			j++;
-		}
-		if (flag == 0)
-			return (-1);
-		flag = 0;
-		i++;
-	}
 	return (0);
 }
 
@@ -123,6 +103,7 @@ int	ft_unset(t_utils_hold *utils_hold)
 		{
 			dup_envp = dup_array(utils_hold,
 					check_if_exists2(hold_args, utils_hold));
+			free_array(utils_hold->envp);
 			utils_hold->envp = dup_envp;
 			i++;
 		}

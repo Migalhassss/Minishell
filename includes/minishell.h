@@ -82,12 +82,17 @@ extern t_global	g_global;
 
 void			ft_lstclear2(t_lexer **lst);
 void			*ft_lstclear_cmd(t_lexer **lst);
-
+int				token_reader2(t_utils_hold *utils_hold);
 // ------------------UTILS_MAIN------------------//
 int				ft_strcmp(const char *s1, const char *s2);
 char			*check_path(char **envp);
 void			path_find(t_utils_hold *utils_hold);
 void			free_array(char **split_array);
+int				any_quote(char *line);
+int				single_quote(char *line);
+int				double_quote(char *line);
+char			*delete_quotes(char *str, char c);
+void			remove_quotes(t_utils_hold *utils_hold);
 // ------------------INT_MAIN--------------------//
 void			sigint_handler(int sig_num);
 char			**ft_envpdup(char **envp);
@@ -106,6 +111,15 @@ int				handle_token(t_utils_hold *utils_hold, int i,
 					t_lexer **lexer_list);
 int				add_node(char *str, int token, t_lexer **lexer_list,
 					t_utils_hold *utils_hold);
+char			*empty_env(char *args, char *var_name, int i);
+char			*update_args(char *args, char *var_value, 
+					char *var_name, int i);
+char			*replace_env_vars(t_utils_hold *utils_hold);
+int				check_if_onlydollar(char *args, int i);
+char			*take_var_name(char *args, int i);
+char			*get_env_value(char *env_name, t_utils_hold *utils_hold);
+char			*detect_dollar_sigs(char *args, char *var_value,
+					char *var_name, int *i);
 // ----------------------------------------------//
 
 // ------------------PARSER----------------------//
@@ -136,6 +150,8 @@ void			handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold);
 int				find_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold);
 char			**resplit_str(char **double_arr);
 char			*join_split_str(char **split_str, char *new_str);
+int				handle_infile(char *file);
+int				handle_outfile(t_lexer *redirection, char *file);
 int				cmd_not_found(char *str, t_utils_hold *utils_hold);
 // ----------------------------------------------//
 
@@ -243,6 +259,7 @@ void			print_env(t_utils_hold *utils_hold, int *i);
 int				check_redirections(t_simple_cmds *cmd,
 					t_utils_hold *utils_hold	);
 void			clean_exit(t_utils_hold *utils_hold, int exit_code);
+int				check_append_outfile(t_lexer *redirections, char *file);
 
 /*
 " | " = 1

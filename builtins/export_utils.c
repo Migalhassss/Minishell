@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 18:44:27 by jabreu-d          #+#    #+#             */
-/*   Updated: 2023/10/19 19:37:14 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/25 18:34:53 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,28 @@ int	check_args(char **hold_args)
 {
 	int	i;
 	int	j;
+	int	flag;
 
 	i = 0;
 	j = 0;
+	flag = 0;
 	while (hold_args[i])
 	{
 		j = 0;
 		while (hold_args[i][j])
 		{
-			if (hold_args[i][0] == '=' || ft_isdigit(hold_args[i][0]) == 1)
+			if (hold_args[i][0] == '=' || ft_isdigit(hold_args[i][0]) == 1 || ft_isalpha(hold_args[i][0]) == 0)
 			{
 				printf("minishell: export: `%s': not a valid identifier\n", hold_args[i]);
-				return (-1);
+				flag = 1;
+				break ;
 			}
 			j++;
 		}
 		i++;
 	}
+	if (flag == 1)
+		return (-1);
 	return (0);
 }
 

@@ -14,15 +14,26 @@ FILES	=	main.c 							\
 			builtins/cd.c					\
 			builtins/cd_utils.c				\
 			utils/utils.c					\
+			utils/utils2.c					\
+			utils/utils3.c					\
 			utils/parse_envp.c				\
 			utils/minishell_loop.c			\
+			utils/minishell_loop_utils1.c	\
+			utils/minishell_loop_utils2.c	\
+			utils/minishell_loop_utils3.c	\
 			utils/execute.c					\
 			utils/execute_utils1.c			\
 			utils/execute_utils2.c			\
+			utils/execute_utils3.c			\
+			utils/execute_utils4.c			\
+			utils/execute_utils5.c			\
 			utils/execute_heredoc.c			\
 			utils/execute_heredoc_utils1.c	\
 			parser/parser.c					\
+			parser/parser_utils.c			\
+			parser/parser_utils2.c			\
 			lexer/token_reader.c			\
+			lexer/token_utils.c				\
 			#lexer/handle_token.c			\
 			lexer/handle_quotes.c			\
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_utils2.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jabreu-d <jabreu-d@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/07 19:10:36 by jabreu-d          #+#    #+#             */
+/*   Updated: 2023/10/07 19:10:36 by jabreu-d         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 int	ft_strcmp(const char *s1, const char *s2)
@@ -12,7 +24,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-char *take_command_to_check(char *args)
+char	*take_command_to_check(char *args)
 {
 	char	*cmd;
 	int		i;
@@ -26,7 +38,7 @@ char *take_command_to_check(char *args)
 	return (cmd);
 }
 
-char *take_command(t_utils_hold *utils_hold)
+char	*take_command(t_utils_hold *utils_hold)
 {
 	char	*cmd;
 	char	*args;

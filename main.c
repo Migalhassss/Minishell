@@ -16,11 +16,15 @@ t_global	g_global;
 
 void	sigint_handler(int sig_num)
 {
-	write (1, "\n", 1);
+	if (!g_global.in_heredoc)
+		ft_putstr_fd("\n", STDERR_FILENO);
 	if (g_global.in_cmd == 1)
 	{
+		g_global.stop_heredoc = 1;
+		write(1, "\n", 1);
+		rl_on_new_line();
 		rl_replace_line("", 0);
-		rl_redisplay();
+		rl_done = 1;
 		return ;
 	}
 	rl_on_new_line();
@@ -39,7 +43,7 @@ int	main(int ac, char **av, char **envp)
 		exit(0);
 	}
 	signal(SIGINT, sigint_handler);
-	// signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	utils.envp = ft_envpdup(envp);
 	pwd_find(&utils);
 	implement_utils_hold(&utils);

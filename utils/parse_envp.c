@@ -50,7 +50,6 @@ void	path_find(t_utils_hold *utils_hold)
 	int		i;
 	char	*part_path;
 
-
 	path = check_path(utils_hold->envp);
 	utils_hold->paths = ft_split(path, ':');
 	free(path);

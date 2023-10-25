@@ -35,8 +35,7 @@ char	*which_command(t_utils_hold *utils_hold)
 {
 	int			i;
 	char		*cmd;
-	static char	*builtins[7][1] = {
-	{"echo"},
+	static char	*builtins[7][1] = {{"echo"},
 	{"cd"},
 	{"pwd"},
 	{"export"},
@@ -91,7 +90,8 @@ void	single_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 int	prepare_executor(t_utils_hold *utils_hold)
 {
 	g_global.in_cmd = 1;
-	if (check_builtins(utils_hold) == 1 || check_cmd(utils_hold->simple_cmds, utils_hold) == 0)
+	if (check_builtins(utils_hold) == 1 
+		|| check_cmd(utils_hold->simple_cmds, utils_hold) == 0)
 	{
 		if (utils_hold->pipes == 0)
 			single_cmd(utils_hold->simple_cmds, utils_hold);

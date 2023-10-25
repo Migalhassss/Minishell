@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 18:49:47 by jabreu-d          #+#    #+#             */
-/*   Updated: 2023/10/17 13:57:09 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/25 18:53:45 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,27 +69,35 @@ int	checkerror_identifier(char **hold_args)
 {
 	int	i;
 	int	j;
+	int	flag;
 
 	i = -1;
-	if (ft_strchr(hold_args[1], '=') != NULL)
-	{
-		printf("minishell: export: `%s': not a valid identifier\n",
-			hold_args[i]);
+	flag = 0;
+	if (!hold_args[0])
 		return (-1);
+	if (ft_strchr(hold_args[0], '=') != NULL)
+	{
+		printf("minishell: unset: `%s': not a valid identifier\n",
+			hold_args[0]);
+		flag = 1;
+		i++;
 	}
 	while (hold_args[++i])
 	{
 		j = 0;
 		while (hold_args[i][j])
 		{
-			if (ft_isdigit(hold_args[i][0]) == 1)
+			if (ft_isdigit(hold_args[i][0]) == 1 || ft_strchr(hold_args[i], '=') != NULL)
 			{
-				printf("minishell: export: `%s': not a valid identifier\n",
+				printf("minishell: unset: `%s': not a valid identifier\n",
 					hold_args[i]);
-				return (-1);
+				flag = 1;
+				break ;
 			}
 			j++;
 		}
 	}
+	if (flag == 1)
+		return (1);
 	return (0);
 }
