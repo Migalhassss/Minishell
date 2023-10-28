@@ -33,12 +33,6 @@ void	print_args(char	*args, int i)
 {
 	while (args[i])
 	{
-		// if (args[i] == '|')
-		// 	return ;
-		// else if (args[i] == '<')
-		// 	return ;
-		// else if (args[i] == '>')
-		// 	return ;
 		ft_putchar_fd(args[i], 1);
 		i++;
 	}
@@ -53,6 +47,12 @@ int	ft_echo(t_utils_hold *utils_hold)
 	n_flag = check_n(utils_hold->args);
 	if (n_flag != -1)
 		i = n_flag + 1;
+	if ((size_t)i == ft_strlen(utils_hold->args) || (size_t)i > ft_strlen(utils_hold->args))
+	{
+		if (n_flag == -1)
+			ft_putchar_fd('\n', 1);
+		return (0);
+	}
 	print_args(utils_hold->args, i);
 	while (utils_hold->args[i] == ' ')
 		i++;

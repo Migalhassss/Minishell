@@ -140,8 +140,6 @@ void	lexer_to_args(t_utils_hold *utils_hold)
 	printf("args = %s\n", utils_hold->args);
 }
 
-
-
 int	token_reader(t_utils_hold *utils_hold)
 {
 	utils_hold->lexer_list = NULL;

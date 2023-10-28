@@ -95,14 +95,11 @@ int	ft_export(t_utils_hold *utils_hold)
 	else
 	{
 		hold_args = ft_split(utils_hold->args, ' ');
-		if (check_args(hold_args) == -1)
-		{
-			free_array(hold_args);
-			return (1);
-		}
 		while (hold_args[i])
 		{
-			if (check_if_exists_helper(hold_args[i], utils_hold) == 1)
+			if (check_args(hold_args[i]) == -1)
+				;
+			else if (check_if_exists_helper(hold_args[i], utils_hold) == 1)
 				update_envp(hold_args[i], utils_hold);
 			else
 				add_envp(hold_args[i], utils_hold, ft_arrlen(hold_args));
