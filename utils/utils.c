@@ -26,31 +26,31 @@ int	ifis_double_quotes(t_utils_hold *utils_hold)
 
 int	count_quotes(t_utils_hold *utils_hold)
 {
-	char	*tmp;
+	// char	*tmp;
 
-	tmp = ft_strtrim(utils_hold->args, " ");
-	if (ft_strlen(tmp) == 0 || !tmp)
-	{
-		free(tmp);
-		reset_utils_hold(utils_hold);
-	}
-	free(tmp);
+	// tmp = ft_strtrim(utils_hold->args, " ");
+	// if (ft_strlen(tmp) == 0 || !tmp)
+	// {
+	// 	free(tmp);
+	// 	reset_utils_hold(utils_hold);
+	// }
+	// free(tmp);
 	if (any_quote(utils_hold->args) == 0)
 		return (0);
 	if (single_quote(utils_hold->args) == 1
 		|| double_quote(utils_hold->args) == 1)
 		return (1);
-	if (ifis_double_quotes(utils_hold) == 1)
-		return (0);
-	remove_quotes(utils_hold);
-	tmp = ft_strtrim(utils_hold->args, " ");
-	if (ft_strlen(tmp) == 0 || !tmp
-		|| ft_strlen(utils_hold->args) == 0)
-	{
-		free(tmp);
-		reset_utils_hold(utils_hold);
-	}
-	free(tmp);
+	// if (ifis_double_quotes(utils_hold) == 1)
+	// 	return (0);
+	// remove_quotes(utils_hold);
+	// tmp = ft_strtrim(utils_hold->args, " ");
+	// if (ft_strlen(tmp) == 0 || !tmp
+	// 	|| ft_strlen(utils_hold->args) == 0)
+	// {
+	// 	free(tmp);
+	// 	reset_utils_hold(utils_hold);
+	// }
+	// free(tmp);
 	return (0);
 }
 

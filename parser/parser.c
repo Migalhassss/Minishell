@@ -92,13 +92,25 @@ void	simple_cmdsadd_back(t_simple_cmds **lst, t_simple_cmds *new)
 	new->prev = tmp;
 }
 
+int pipe_last(t_utils_hold *utils_hold)
+{
+	t_lexer *tmp;
+
+	tmp = utils_hold->lexer_list;
+	while (tmp->next)
+		tmp = tmp->next;
+	if (tmp->token == 1)
+		return (1);
+	return (0);
+}
+
 int	parser(t_utils_hold *utils_hold)
 {
 	t_simple_cmds	*simple_cmds;
 	t_parser_utils	parser_utils;
 
 	utils_hold->simple_cmds = NULL;
-	if (utils_hold->lexer_list->token == 1)
+	if (utils_hold->lexer_list->token == 1 || pipe_last(utils_hold) == 1)
 		return (ft_error(0, utils_hold));
 	while (utils_hold->lexer_list)
 	{

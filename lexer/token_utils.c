@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 15:38:07 by micarrel          #+#    #+#             */
-/*   Updated: 2023/10/25 16:02:47 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/28 16:10:57 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,38 @@ int	add_node(char *str, int token, t_lexer **lexer_list,
 	return (1);
 }
 
+int	handle_single_quotes(t_utils_hold *utils_hold, int i)
+{
+	int		j;
+
+	j = i + 1;
+	i++;
+	if (utils_hold->args[i] == '\'')
+		i += 2;
+	while (utils_hold->args[i] != '\'' && utils_hold->args[i] != '\0')
+		i++;
+	if (utils_hold->args[i + 1] == '\'')
+		i++;
+	if (!add_node(ft_substr(utils_hold->args, j, i - j), 0,
+			&utils_hold->lexer_list, utils_hold))
+		return (-1);
+	i++;
+	return (i);
+}
+
 int	handle_double_quotes(t_utils_hold *utils_hold, int i)
 {
 	int		j;
 
-	j = i;
+	j = i + 1;
 	i++;
+	if (utils_hold->args[i] == '\"')
+		i += 2;
 	while (utils_hold->args[i] != '\"' && utils_hold->args[i] != '\0')
 		i++;
-	if (!add_node(ft_substr(utils_hold->args, j, i - j + 1), 0,
+	if (utils_hold->args[i + 1] == '\"')
+		i++;
+	if (!add_node(ft_substr(utils_hold->args, j, i - j), 0,
 			&utils_hold->lexer_list, utils_hold))
 		return (-1);
 	i++;
@@ -92,6 +115,8 @@ int	token_reader2(t_utils_hold *utils_hold)
 			i++;
 		else if (utils_hold->args[i] == '\"')
 			i = handle_double_quotes(utils_hold, i);
+		else if (utils_hold->args[i] == '\'')
+			i = handle_single_quotes(utils_hold, i);
 		else if (utils_hold->args[i] == '|' || utils_hold->args[i] == '<'
 			|| utils_hold->args[i] == '>')
 			i = handle_token2(utils_hold, i);

@@ -21,7 +21,6 @@ void	sigint_handler(int sig_num)
 	if (g_global.in_cmd == 1)
 	{
 		g_global.stop_heredoc = 1;
-		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_done = 1;

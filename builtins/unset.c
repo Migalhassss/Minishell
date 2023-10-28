@@ -76,13 +76,6 @@ char	**dup_array(t_utils_hold *utils_hold, int j)
 
 int	check_args1(char **hold_args)
 {
-	int	i;
-	int	j;
-	int	flag;
-
-	i = 0;
-	j = 0;
-	flag = 0;
 	if (checkerror_identifier(hold_args) == 1)
 		return (-1);
 	return (0);

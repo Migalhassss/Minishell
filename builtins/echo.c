@@ -33,12 +33,12 @@ void	print_args(char	*args, int i)
 {
 	while (args[i])
 	{
-		if (args[i] == '|')
-			return ;
-		else if (args[i] == '<')
-			return ;
-		else if (args[i] == '>')
-			return ;
+		// if (args[i] == '|')
+		// 	return ;
+		// else if (args[i] == '<')
+		// 	return ;
+		// else if (args[i] == '>')
+		// 	return ;
 		ft_putchar_fd(args[i], 1);
 		i++;
 	}

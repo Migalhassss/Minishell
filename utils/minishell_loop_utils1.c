@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 17:58:30 by micarrel          #+#    #+#             */
-/*   Updated: 2023/10/25 17:59:12 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/28 17:32:28 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	*ft_lstclear_cmd(t_lexer **lst)
 void	ft_simple_cmdsclear(t_simple_cmds **lst)
 {
 	t_simple_cmds	*tmp;
-
+	
 	if (!*lst)
 		return ;
 	if ((*lst)->prev != NULL)

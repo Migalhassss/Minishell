@@ -105,14 +105,52 @@ int	check_pipes(t_utils_hold *utils_hold)
 	return (0);
 }
 
+
+void	print_lexer_list(t_lexer *lexer)
+{
+	t_lexer	*tmp;
+
+	tmp = lexer;
+	while (tmp)
+	{
+		printf("str = %s\n", tmp->str);
+		printf("type = %d\n", tmp->token);
+		tmp = tmp->next;
+	}
+}
+
+void	lexer_to_args(t_utils_hold *utils_hold)
+{
+	t_lexer	*tmp_lst;
+	char	*tmp;
+
+	tmp_lst = utils_hold->lexer_list;
+	tmp = ft_strdup(tmp_lst->str);
+	tmp_lst = tmp_lst->next;
+	while (tmp_lst)
+	{
+		utils_hold->args = ft_strjoin(tmp, " ");
+		free(tmp);
+		tmp = ft_strjoin(utils_hold->args, tmp_lst->str);
+		free(utils_hold->args);
+		tmp_lst = tmp_lst->next;
+	}
+	utils_hold->args = ft_strdup(tmp);
+	free(tmp);
+	printf("args = %s\n", utils_hold->args);
+}
+
+
+
 int	token_reader(t_utils_hold *utils_hold)
 {
 	utils_hold->lexer_list = NULL;
 	if (ft_strlen(utils_hold->args) == 0)
 		return (0);
-	if (ft_strchr(utils_hold->args, '|') && check_pipes(utils_hold))
-		return (ft_error(0, utils_hold));
+	if (check_pipes(utils_hold) == 1)
+		return (1);
 	if (token_reader2(utils_hold) == 1)
 		return (1);
+	lexer_to_args(utils_hold);
 	return (0);
 }

@@ -260,7 +260,7 @@ int				check_redirections(t_simple_cmds *cmd,
 					t_utils_hold *utils_hold	);
 void			clean_exit(t_utils_hold *utils_hold, int exit_code);
 int				check_append_outfile(t_lexer *redirections, char *file);
-
+void			free_lexer(t_lexer *redirections);
 /*
 " | " = 1
 " > " =  2

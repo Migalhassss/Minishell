@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 19:10:54 by jabreu-d          #+#    #+#             */
-/*   Updated: 2023/10/25 20:54:40 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/27 20:04:24 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ char	*join_split_str(char **split_str, char *new_str)
 
 	if (!split_str || !split_str[0])
 		return (NULL);
-
 	tmp = ft_strdup(split_str[0]);
 	i = 1;
 	while (split_str[i])
