@@ -127,6 +127,7 @@ void	lexer_to_args(t_utils_hold *utils_hold)
 	tmp_lst = utils_hold->lexer_list;
 	tmp = ft_strdup(tmp_lst->str);
 	tmp_lst = tmp_lst->next;
+	free(utils_hold->args);
 	while (tmp_lst)
 	{
 		utils_hold->args = ft_strjoin(tmp, " ");
@@ -137,7 +138,6 @@ void	lexer_to_args(t_utils_hold *utils_hold)
 	}
 	utils_hold->args = ft_strdup(tmp);
 	free(tmp);
-	printf("args = %s\n", utils_hold->args);
 }
 
 int	token_reader(t_utils_hold *utils_hold)

@@ -18,10 +18,16 @@ void	free_lexer(t_lexer *redirections)
 	t_lexer	*next;
 
 	current = redirections;
+	if (!redirections)
+		return ;
+	if (redirections->prev != NULL)
+		while (redirections->prev)
+			redirections = redirections->prev;
 	while (current)
 	{
 		next = current->next;
-		free(current->str);
+		if (current->str)
+			free(current->str);
 		free(current);
 		current = next;
 	}
@@ -55,14 +61,17 @@ int	check_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 
 int	check_redirections_doc(t_simple_cmds *cmd)
 {
+	t_lexer	*tmp;
+
+	tmp = cmd->redirections;
 	if (cmd->prev != NULL)
 		while (cmd->prev)
 			cmd = cmd->prev;
-	while (cmd->redirections)
+	while (tmp)
 	{
-		if (cmd->redirections->token == 5)
+		if (tmp->token == 5)
 			return (1);
-		cmd->redirections = cmd->redirections->next;
+		tmp = tmp->next;
 	}
 	return (0);
 }
@@ -71,6 +80,7 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 {
 	int	exit_code;
 	char	*tmp;
+
 	exit_code = 0;
 	if (cmd->redirections)
 	{
@@ -93,8 +103,6 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 		which_command(utils_hold);
 	else if (cmd->str[0][0] != '\0')
 		exit_code = find_cmd(cmd, utils_hold);
-	if (cmd->hd_file_name)
-		free(cmd->hd_file_name);
 	free_array(utils_hold->envp);
 	clean_exit(utils_hold, exit_code);
 }

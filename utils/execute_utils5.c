@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 17:49:03 by micarrel          #+#    #+#             */
-/*   Updated: 2023/10/25 17:49:44 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/29 22:02:40 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	clean_exit(t_utils_hold *utils_hold, int exit_code)
 		free(current);
 		current = next;
 	}
+	free_lexer(utils_hold->lexer_list);
 	ft_simple_cmdsclear(&utils_hold->simple_cmds);
 	free(utils_hold->args);
 	free(utils_hold->pwd);
