@@ -65,12 +65,16 @@ char	**dup_array(t_utils_hold *utils_hold, int j)
 		if (utils_hold->envp[i] != NULL)
 			dup_envp[k] = ft_strdup(utils_hold->envp[i]);
 		else
+		{
+			dup_envp[k] = NULL;
+			free_array(utils_hold->envp);
 			return (dup_envp);
+		}
 		k++;
 		i++;
 	}
-	free_array(utils_hold->envp);
 	dup_envp[k] = NULL;
+	free_array(utils_hold->envp);
 	return (dup_envp);
 }
 
@@ -96,7 +100,6 @@ int	ft_unset(t_utils_hold *utils_hold)
 		{
 			dup_envp = dup_array(utils_hold,
 					check_if_exists2(hold_args, utils_hold));
-			free_array(utils_hold->envp);
 			utils_hold->envp = dup_envp;
 			i++;
 		}

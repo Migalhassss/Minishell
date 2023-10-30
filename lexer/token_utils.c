@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 15:38:07 by micarrel          #+#    #+#             */
-/*   Updated: 2023/10/28 16:10:57 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:40:37 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,14 @@ int	handle_single_quotes(t_utils_hold *utils_hold, int i)
 
 	j = i + 1;
 	i++;
-	if (utils_hold->args[i] == '\'')
+	if (utils_hold->args[i] == '\'' && utils_hold->args[i + 1] != '\0'
+			&& (size_t)i <= ft_strlen(utils_hold->args))
 		i += 2;
-	while (utils_hold->args[i] != '\'' && utils_hold->args[i] != '\0')
+	while (utils_hold->args[i] != '\'' && utils_hold->args[i] != '\0'
+			&& (size_t)i <= ft_strlen(utils_hold->args))
 		i++;
-	if (utils_hold->args[i + 1] == '\'')
+	if (utils_hold->args[i + 1] == '\'' && utils_hold->args[i + 1] != '\0'
+			&& (size_t)i <= ft_strlen(utils_hold->args))
 		i++;
 	if (!add_node(ft_substr(utils_hold->args, j, i - j), 0,
 			&utils_hold->lexer_list, utils_hold))
@@ -65,11 +68,14 @@ int	handle_double_quotes(t_utils_hold *utils_hold, int i)
 
 	j = i + 1;
 	i++;
-	if (utils_hold->args[i] == '\"')
+	if (utils_hold->args[i] == '\"' && utils_hold->args[i + 1] != '\0'
+			&& (size_t)i <= ft_strlen(utils_hold->args))
 		i += 2;
-	while (utils_hold->args[i] != '\"' && utils_hold->args[i] != '\0')
+	while (utils_hold->args[i] != '\"' && utils_hold->args[i] != '\0'
+			&& (size_t)i <= ft_strlen(utils_hold->args))
 		i++;
-	if (utils_hold->args[i + 1] == '\"')
+	if (utils_hold->args[i + 1] == '\"' && utils_hold->args[i + 1] != '\0'
+			&& (size_t)i <= ft_strlen(utils_hold->args))
 		i++;
 	if (!add_node(ft_substr(utils_hold->args, j, i - j), 0,
 			&utils_hold->lexer_list, utils_hold))

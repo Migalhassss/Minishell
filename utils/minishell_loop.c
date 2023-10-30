@@ -82,9 +82,9 @@ int	minishell_loop(t_utils_hold *utils_hold)
 	if (ft_strlen(utils_hold->args) == 0)
 		reset_utils_hold(utils_hold);
 	add_history(utils_hold->args);
-	utils_hold->args = replace_env_vars(utils_hold);
 	if (count_quotes(utils_hold) == 1)
 		return (ft_error(2, utils_hold));
+	utils_hold->args = replace_env_vars(utils_hold);
 	if (token_reader(utils_hold) == 1)
 		return (ft_error(1, utils_hold));
 	parser(utils_hold);
