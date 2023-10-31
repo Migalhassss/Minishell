@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils2.c                                           :+:      :+:    :+:   */
+/*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 17:45:16 by micarrel          #+#    #+#             */
-/*   Updated: 2023/10/25 17:45:29 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:49:36 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	remove_quotes(t_utils_hold *utils_hold)
 
 	i = 0;
 	in_quotes = false;
+	if (any_quote(utils_hold->args) == 0)
+		return ;
 	tmp = ft_strdup(utils_hold->args);
 	free(utils_hold->args);
 	tmp = remove_quotes_utils(tmp, i, in_quotes);

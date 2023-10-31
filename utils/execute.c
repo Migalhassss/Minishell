@@ -77,6 +77,11 @@ void	single_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 		return ;
 	}
 	free(exit_cmd);
+	if (utils_hold->args[0] == '>' || utils_hold->args[0] == '<')
+	{
+		reset_utils_hold(utils_hold);
+		return ;
+	}
 	pid = fork();
 	if (pid < 0)
 		ft_error(5, utils_hold);
@@ -91,7 +96,8 @@ int	prepare_executor(t_utils_hold *utils_hold)
 {
 	g_global.in_cmd = 1;
 	if (check_builtins(utils_hold) == 1 
-		|| check_cmd(utils_hold->simple_cmds, utils_hold) == 0)
+		|| check_cmd(utils_hold->simple_cmds, utils_hold) == 0
+		|| utils_hold->args[0] == '>' || utils_hold->args[0] == '<')
 	{
 		if (utils_hold->pipes == 0)
 			single_cmd(utils_hold->simple_cmds, utils_hold);

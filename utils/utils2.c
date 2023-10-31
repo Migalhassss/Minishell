@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 17:44:47 by micarrel          #+#    #+#             */
-/*   Updated: 2023/10/25 18:09:14 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:50:17 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	any_quote(char *line)
 	int	i;
 
 	i = 0;
+	if (!line)
+		return (0);
 	while (line[i])
 	{
 		if (line[i] == 34 || line[i] == 39)

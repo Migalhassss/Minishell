@@ -59,10 +59,12 @@ int	check_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 	return (1);
 }
 
-int	check_redirections_doc(t_simple_cmds *cmd)
+int	check_redirections_doc(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 {
 	t_lexer	*tmp;
 
+	if (utils_hold->args[0] == '>' || 	utils_hold->args[0] == '<')
+		return (0);
 	tmp = cmd->redirections;
 	if (cmd->prev != NULL)
 		while (cmd->prev)
@@ -93,7 +95,7 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 	free(utils_hold->args);
 	utils_hold->args = join_split_str(cmd->str, NULL);
 	remove_quotes(utils_hold);
-	if (check_redirections_doc(cmd))
+	if (check_redirections_doc(cmd, utils_hold))
 	{
 		tmp = ft_strjoin(utils_hold->args, " ");
 		free(utils_hold->args);
