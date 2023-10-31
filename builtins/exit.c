@@ -58,6 +58,7 @@ void	free_utils_hold(t_utils_hold *utils_hold)
 	rl_clear_history();
 	if (utils_hold->pipes)
 		free(utils_hold->pid);
+	close(STDOUT_FILENO);
 }
 
 int	ft_exit(t_utils_hold *utils_hold)

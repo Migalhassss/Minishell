@@ -89,7 +89,6 @@ int	minishell_loop(t_utils_hold *utils_hold)
 		return (ft_error(1, utils_hold));
 	parser(utils_hold);
 	prepare_executor(utils_hold);
-	free_lexer_list(utils_hold);
 	reset_utils_hold(utils_hold);
 	return (1);
 }

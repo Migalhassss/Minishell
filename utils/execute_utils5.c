@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 17:49:03 by micarrel          #+#    #+#             */
-/*   Updated: 2023/10/29 22:02:40 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:28:31 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,18 +76,6 @@ char	*get_env_value(char *env_name, t_utils_hold *utils_hold)
 
 void	clean_exit(t_utils_hold *utils_hold, int exit_code)
 {
-	t_lexer	*next;
-	t_lexer	*current;
-
-	current = utils_hold->simple_cmds->redirections;
-	while (current)
-	{
-		next = current->next;
-		free(current->str);
-		free(current);
-		current = next;
-	}
-	free_lexer(utils_hold->lexer_list);
 	ft_simple_cmdsclear(&utils_hold->simple_cmds);
 	free(utils_hold->args);
 	free(utils_hold->pwd);

@@ -99,7 +99,6 @@ int	cd_dotdot(t_utils_hold *utils_hold)
 	free(utils_hold->pwd);
 	utils_hold->pwd = ft_strdup(tmp);
 	free(tmp);
-	update_pwd(utils_hold);
 	if (chdir(utils_hold->pwd) == -1)
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
@@ -107,7 +106,9 @@ int	cd_dotdot(t_utils_hold *utils_hold)
 		ft_putstr_fd(": No such file or directory\n", 2);
 		return (-1);
 	}
+	free(utils_hold->pwd);
 	utils_hold->pwd = getcwd(NULL, 0);
+	update_pwd(utils_hold);
 	return (0);
 }
 

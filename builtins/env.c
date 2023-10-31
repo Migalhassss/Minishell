@@ -17,7 +17,6 @@ void	ft_full_env(t_utils_hold *utils_hold)
 	int	i;
 
 	i = 0;
-	printf("full env\n");
 	while (utils_hold->envp[i])
 	{
 		if (utils_hold->envp[i] && utils_hold->envp[i][0] != '\0')

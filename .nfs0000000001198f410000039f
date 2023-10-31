@@ -1,0 +1,14 @@
+a
+builtins
+error
+includes
+lexer
+libft
+main.c
+main.o
+Makefile
+minishell
+minishell_tester
+out
+parser
+utils

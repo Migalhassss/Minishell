@@ -37,9 +37,10 @@ int	create_heredoc(bool quotes,
 		tmp = tmp->next;
 	fd = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	line = readline(">");
-	while (line && ft_strncmp(tmp->next->str, line, ft_strlen(tmp->next->str)
-		&& !g_global.stop_heredoc))
+	while (line && !g_global.stop_heredoc)
 	{
+		if (!ft_strncmp(tmp->next->str, line, ft_strlen(line)))
+			break ;
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);

@@ -54,6 +54,7 @@ typedef struct s_utils_hold
 	char					*old_pwd;
 	int						pipes;
 	int						*pid;
+	int						fd_in;
 	bool					heredoc;
 	bool					reset;
 	int						index_list;

@@ -92,6 +92,7 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 	}
 	free(utils_hold->args);
 	utils_hold->args = join_split_str(cmd->str, NULL);
+	remove_quotes(utils_hold);
 	if (check_redirections_doc(cmd))
 	{
 		tmp = ft_strjoin(utils_hold->args, " ");
@@ -103,6 +104,8 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 		which_command(utils_hold);
 	else if (cmd->str[0][0] != '\0')
 		exit_code = find_cmd(cmd, utils_hold);
+	close(STDOUT_FILENO);
+	close(STDIN_FILENO);
 	free_array(utils_hold->envp);
 	clean_exit(utils_hold, exit_code);
 }

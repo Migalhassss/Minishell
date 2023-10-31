@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 17:58:30 by micarrel          #+#    #+#             */
-/*   Updated: 2023/10/29 21:12:21 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:24:14 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	ft_simple_cmdsclear(t_simple_cmds **lst)
 	while (*lst)
 	{
 		tmp = (*lst)->next;
+		if ((*lst)->redirections)
+			free_lexer((*lst)->redirections);
 		if ((*lst)->str)
 			free_array((*lst)->str);
 		if ((*lst)->hd_file_name)

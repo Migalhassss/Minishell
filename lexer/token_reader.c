@@ -140,11 +140,25 @@ void	lexer_to_args(t_utils_hold *utils_hold)
 	free(tmp);
 }
 
+int	only_spaces(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != ' ')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	token_reader(t_utils_hold *utils_hold)
 {
 	utils_hold->lexer_list = NULL;
-	if (ft_strlen(utils_hold->args) == 0)
-		return (0);
+	if (ft_strlen(utils_hold->args) == 0 || only_spaces(utils_hold->args) == 1)
+		return (reset_utils_hold(utils_hold));
 	if (check_pipes(utils_hold) == 1)
 		return (1);
 	if (token_reader2(utils_hold) == 1)
