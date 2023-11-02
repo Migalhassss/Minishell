@@ -43,10 +43,9 @@ int	ft_env(t_utils_hold *utils_hold)
 	}
 	while (utils_hold->envp[i])
 	{
-		if (ft_strchr(utils_hold->envp[i], '=') &&
-			utils_hold->envp[i] && utils_hold->envp[i][0] != '\0')
+		if (ft_strchr(utils_hold->envp[i], '=')
+			&& utils_hold->envp[i] && utils_hold->envp[i][0] != '\0')
 		{
-
 			ft_putstr_fd(utils_hold->envp[i], 1);
 			ft_putchar_fd('\n', 1);
 		}

@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 18:38:04 by jabreu-d          #+#    #+#             */
-/*   Updated: 2023/10/17 12:16:44 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/11/02 17:57:12 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	update_pwd(t_utils_hold *utils_hold)
 	update_oldpwd(utils_hold);
 }
 
-
 int	check_n_args(t_utils_hold *utils_hold)
 {
 	int		i;
@@ -69,7 +68,7 @@ int	check_n_args(t_utils_hold *utils_hold)
 
 int	check_cd_args(t_utils_hold *utils_hold)
 {
-if (check_n_args(utils_hold) == -1)
+	if (check_n_args(utils_hold) == -1)
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		return (-1);

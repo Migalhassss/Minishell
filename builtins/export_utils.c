@@ -6,63 +6,11 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 18:44:27 by jabreu-d          #+#    #+#             */
-/*   Updated: 2023/10/31 17:37:57 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/11/02 19:08:16 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*ft_strdup_2(const char *src)
-{
-	char	*dest;
-	int		i;
-	int		len;
-
-	len = 0;
-	i = 0;
-	dest = NULL;
-	while (src[i] != '\0')
-	{
-		if (src[i] != '"' && src[i] != '\'')
-			len++;
-		i++;
-	}
-	dest = (char *)malloc(len * sizeof(char) + 1);
-	if (!dest)
-		return (0);
-	i = 0;
-	while (src[i] != '\0')
-	{
-		if (src[i] != '"' && src[i] != '\'')
-			dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-int	check_args(char *hold_args)
-{
-	int	i;
-
-	i = 0;
-	if (hold_args[0] == '=' || ft_isdigit(hold_args[0]) == 1 || ft_isalpha(hold_args[0]) == 0)
-	{
-		printf("minishell: export: `%s': not a valid identifier\n", hold_args);
-		return (-1);
-	}
-	i++;
-	while (hold_args[i])
-	{
-		if (ft_isalnum(hold_args[i]) == 0)
-		{
-			printf("minishell: export: `%s': not a valid identifier\n", hold_args);
-			return (-1);
-		}
-		i++;
-	}
-	return (0);
-}
 
 int	ft_strcharcmp(char *s1, const char *s2, char c)
 {
@@ -88,7 +36,6 @@ int	envp_len(char *str)
 	while (str[i] && str[i] != '=')
 		i++;
 	return (i);
-
 }
 
 int	ifexists_without_value(char *evnp, char *str)

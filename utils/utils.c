@@ -31,6 +31,8 @@ int	count_quotes(t_utils_hold *utils_hold)
 	if (single_quote(utils_hold->args) == 1
 		|| double_quote(utils_hold->args) == 1)
 		return (1);
+	if (check_pipes(utils_hold) == 1)
+		return (1);
 	return (0);
 }
 

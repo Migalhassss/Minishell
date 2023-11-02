@@ -9,6 +9,7 @@ FILES	=	main.c 							\
 			builtins/env.c					\
 			builtins/export.c				\
 			builtins/export_utils.c			\
+			builtins/export_utils2.c		\
 			builtins/unset.c				\
 			builtins/unset_utils.c			\
 			builtins/cd.c					\
@@ -34,7 +35,6 @@ FILES	=	main.c 							\
 			parser/parser_utils2.c			\
 			lexer/token_reader.c			\
 			lexer/token_utils.c				\
-			#lexer/handle_token.c			\
 			lexer/handle_quotes.c			\
 
 OBJS		=	$(FILES:.c=.o)

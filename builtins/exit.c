@@ -66,8 +66,10 @@ int	ft_exit(t_utils_hold *utils_hold)
 	int	exit_code;
 
 	exit_code = 0;
-	if (check_max_long(utils_hold->args) == 0)
-		printf("minishell: exit: %s: numeric argument required\n", utils_hold->args);
+	if (check_max_long(utils_hold->args) == 0
+		|| ft_isdigit(utils_hold->args[0]) == 0)
+		printf("minishell: exit: %s: numeric argument required\n",
+			utils_hold->args);
 	else
 		exit_code = ft_atoi(utils_hold->args);
 	free_utils_hold(utils_hold);

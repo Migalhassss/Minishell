@@ -12,17 +12,6 @@
 
 #include "../includes/minishell.h"
 
-t_parser_utils	init_parser(t_lexer *lexer_list, t_utils_hold *utils_hold)
-{
-	t_parser_utils	parser_utils;
-
-	parser_utils.lexer_list = lexer_list;
-	parser_utils.redirections = NULL;
-	parser_utils.num_redirections = 0;
-	parser_utils.utils = utils_hold;
-	return (parser_utils);
-}
-
 int	fill_str_array(t_parser_utils *parser_utils, char **str, int arg_size)
 {
 	int		i;
@@ -92,9 +81,9 @@ void	simple_cmdsadd_back(t_simple_cmds **lst, t_simple_cmds *new)
 	new->prev = tmp;
 }
 
-int pipe_last(t_utils_hold *utils_hold)
+int	pipe_last(t_utils_hold *utils_hold)
 {
-	t_lexer *tmp;
+	t_lexer	*tmp;
 
 	tmp = utils_hold->lexer_list;
 	while (tmp->next)

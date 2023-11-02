@@ -47,7 +47,8 @@ int	ft_echo(t_utils_hold *utils_hold)
 	n_flag = check_n(utils_hold->args);
 	if (n_flag != -1)
 		i = n_flag + 1;
-	if ((size_t)i == ft_strlen(utils_hold->args) || (size_t)i > ft_strlen(utils_hold->args))
+	if ((size_t)i == ft_strlen(utils_hold->args)
+		|| (size_t)i > ft_strlen(utils_hold->args))
 	{
 		if (n_flag == -1)
 			ft_putchar_fd('\n', 1);

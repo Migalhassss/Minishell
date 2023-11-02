@@ -84,6 +84,7 @@ extern t_global	g_global;
 void			ft_lstclear2(t_lexer **lst);
 void			*ft_lstclear_cmd(t_lexer **lst);
 int				token_reader2(t_utils_hold *utils_hold);
+int				ft_isalnum2(char	*str);
 // ------------------UTILS_MAIN------------------//
 int				ft_strcmp(const char *s1, const char *s2);
 char			*check_path(char **envp);
@@ -228,6 +229,14 @@ int				ft_pwd(t_utils_hold *utils_hold);
 // ------------------------------//
 
 // --------------EXPORT-----------//
+int				handle_single_quotes(t_utils_hold *utils_hold, int i);
+int				handle_double_quotes(t_utils_hold *utils_hold, int i);
+int				handle_token2(t_utils_hold *utils_hold, int i);
+int				handle_word(t_utils_hold *utils_hold, int i);
+int				add_node(char *str, int token, t_lexer **lexer_list,
+					t_utils_hold *utils_hold);
+int				check_pipes(t_utils_hold *utils_hold);
+void			lexer_to_args(t_utils_hold *utils_hold);
 int				ifexists_without_value(char *evnp, char *str);
 int				ft_export(t_utils_hold *utils_hold);
 int				check_args(char *hold_args);
@@ -247,7 +256,7 @@ int				ft_unset(t_utils_hold *utils_hold);
 int				check_if_exists2(char **hold_args, t_utils_hold *utils_hold);
 char			**dup_array(t_utils_hold *utils_hold, int j);
 char			*ft_strdup2(const char *src, char c);
-int				checkerror_identifier(char **hold_args);
+int				checkerror_identifier(char *hold_args);
 // ------------------------------//
 
 // --------------EXIT-------------//

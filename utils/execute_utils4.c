@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 16:22:26 by micarrel          #+#    #+#             */
-/*   Updated: 2023/10/29 21:29:56 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/31 22:37:46 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,7 @@ int	check_redirections_utils(t_simple_cmds *cmd, t_lexer *tmp)
 				return (1);
 			tmp = tmp->next;
 		}
-		else if (cmd->redirections->token == 2
-			|| cmd->redirections->token == 4)
+		else if (cmd->redirections->token == 2 || cmd->redirections->token == 4)
 		{
 			while (tmp && tmp->token != 2
 				&& tmp->token != 4)
@@ -101,10 +100,8 @@ int	check_redirections_utils(t_simple_cmds *cmd, t_lexer *tmp)
 			tmp = tmp->next;
 		}
 		if (cmd->redirections->token == 5)
-		{
 			if (handle_infile(cmd->hd_file_name))
 				return (1);
-		}
 		cmd->redirections = cmd->redirections->next;
 	}
 	return (0);

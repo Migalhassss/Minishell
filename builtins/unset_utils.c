@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 18:49:47 by jabreu-d          #+#    #+#             */
-/*   Updated: 2023/10/25 18:53:45 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/10/31 22:48:33 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,39 +65,26 @@ int	ft_strcharcmp2(char *s1, const char *s2, char c)
 	return (0);
 }
 
-int	checkerror_identifier(char **hold_args)
+int	checkerror_identifier(char *hold_args)
 {
 	int	i;
-	int	j;
-	int	flag;
 
-	i = -1;
-	flag = 0;
-	if (!hold_args[0])
-		return (-1);
-	if (ft_strchr(hold_args[0], '=') != NULL)
+	i = 0;
+	if (hold_args[0] == '=' || ft_isdigit(hold_args[0]) == 1
+		|| ft_isalpha(hold_args[0]) == 0)
 	{
-		printf("minishell: unset: `%s': not a valid identifier\n",
-			hold_args[0]);
-		flag = 1;
+		printf("minishell: export: `%s': not a valid identifier\n", hold_args);
+		return (-1);
+	}
+	while (hold_args[i])
+	{
+		if (ft_isalnum(hold_args[i]) == 0 || ft_strchr(hold_args, '=') != NULL)
+		{
+			printf("minishell: unset: `%s': not a valid identifier\n",
+				hold_args);
+			break ;
+		}
 		i++;
 	}
-	while (hold_args[++i])
-	{
-		j = 0;
-		while (hold_args[i][j])
-		{
-			if (ft_isdigit(hold_args[i][0]) == 1 || ft_strchr(hold_args[i], '=') != NULL)
-			{
-				printf("minishell: unset: `%s': not a valid identifier\n",
-					hold_args[i]);
-				flag = 1;
-				break ;
-			}
-			j++;
-		}
-	}
-	if (flag == 1)
-		return (1);
 	return (0);
 }

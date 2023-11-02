@@ -67,6 +67,7 @@ int	send_heredoc(t_utils_hold *utils_hold, t_simple_cmds *cmd)
 	t_lexer	*start;
 	int		sl;
 	int		fd;
+
 	start = cmd->redirections;
 	sl = 0;
 	while (cmd->redirections)

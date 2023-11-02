@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 17:49:03 by micarrel          #+#    #+#             */
-/*   Updated: 2023/10/31 20:28:31 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/11/02 18:01:38 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ char	*get_env_value(char *env_name, t_utils_hold *utils_hold)
 
 void	clean_exit(t_utils_hold *utils_hold, int exit_code)
 {
+	close(STDOUT_FILENO);
+	close(STDIN_FILENO);
+	free_array(utils_hold->envp);
 	ft_simple_cmdsclear(&utils_hold->simple_cmds);
 	free(utils_hold->args);
 	free(utils_hold->pwd);

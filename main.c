@@ -46,7 +46,7 @@ int	main(int ac, char **av, char **envp)
 	utils.envp = ft_envpdup(envp);
 	pwd_find(&utils);
 	implement_utils_hold(&utils);
-	// printf("\n%s\n\n", "Welcome to minishell!");
+	printf("\n%s\n\n", "Welcome to minishell!");
 	utils.exit_code = 0;
 	minishell_loop(&utils);
 }

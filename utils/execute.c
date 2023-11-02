@@ -78,18 +78,15 @@ void	single_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 	}
 	free(exit_cmd);
 	if (utils_hold->args[0] == '>' || utils_hold->args[0] == '<')
-	{
 		reset_utils_hold(utils_hold);
-		return ;
-	}
 	pid = fork();
 	if (pid < 0)
 		ft_error(5, utils_hold);
 	if (pid == 0)
 		handle_cmd(cmd, utils_hold);
 	waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			utils_hold->exit_code = WEXITSTATUS(status);
+	if (WIFEXITED(status))
+		utils_hold->exit_code = WEXITSTATUS(status);
 }
 
 int	prepare_executor(t_utils_hold *utils_hold)

@@ -63,7 +63,9 @@ int	check_redirections_doc(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 {
 	t_lexer	*tmp;
 
-	if (utils_hold->args[0] == '>' || 	utils_hold->args[0] == '<')
+	if (utils_hold->args[0] == '>' || utils_hold->args[0] == '<')
+		return (0);
+	if (cmd->str[0][0] == '>' || cmd->str[0][0] == '<')
 		return (0);
 	tmp = cmd->redirections;
 	if (cmd->prev != NULL)
@@ -78,9 +80,16 @@ int	check_redirections_doc(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 	return (0);
 }
 
+void	join_split_str2(t_utils_hold *utils_hold, t_simple_cmds *cmd)
+{
+	free(utils_hold->args);
+	utils_hold->args = join_split_str(cmd->str, NULL);
+	remove_quotes(utils_hold);
+}
+
 void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 {
-	int	exit_code;
+	int		exit_code;
 	char	*tmp;
 
 	exit_code = 0;
@@ -92,9 +101,7 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 			clean_exit(utils_hold, exit_code);
 		}
 	}
-	free(utils_hold->args);
-	utils_hold->args = join_split_str(cmd->str, NULL);
-	remove_quotes(utils_hold);
+	join_split_str2(utils_hold, cmd);
 	if (check_redirections_doc(cmd, utils_hold))
 	{
 		tmp = ft_strjoin(utils_hold->args, " ");
@@ -106,8 +113,5 @@ void	handle_cmd(t_simple_cmds *cmd, t_utils_hold *utils_hold)
 		which_command(utils_hold);
 	else if (cmd->str[0][0] != '\0')
 		exit_code = find_cmd(cmd, utils_hold);
-	close(STDOUT_FILENO);
-	close(STDIN_FILENO);
-	free_array(utils_hold->envp);
 	clean_exit(utils_hold, exit_code);
 }

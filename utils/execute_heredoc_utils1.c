@@ -46,7 +46,7 @@ int	create_heredoc(bool quotes,
 		free(line);
 		line = readline(">");
 		if (g_global.stop_heredoc)
-			break;
+			break ;
 	}
 	free(line);
 	if (g_global.stop_heredoc ||!line)

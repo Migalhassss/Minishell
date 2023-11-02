@@ -65,24 +65,13 @@ char	**dup_array(t_utils_hold *utils_hold, int j)
 		if (utils_hold->envp[i] != NULL)
 			dup_envp[k] = ft_strdup(utils_hold->envp[i]);
 		else
-		{
-			dup_envp[k] = NULL;
-			free_array(utils_hold->envp);
-			return (dup_envp);
-		}
+			break ;
 		k++;
 		i++;
 	}
 	dup_envp[k] = NULL;
 	free_array(utils_hold->envp);
 	return (dup_envp);
-}
-
-int	check_args1(char **hold_args)
-{
-	if (checkerror_identifier(hold_args) == 1)
-		return (-1);
-	return (0);
 }
 
 int	ft_unset(t_utils_hold *utils_hold)
@@ -93,21 +82,14 @@ int	ft_unset(t_utils_hold *utils_hold)
 
 	i = 0;
 	hold_args = ft_split(utils_hold->args, ' ');
-	if (!check_args1(hold_args)
-		&& check_if_exists2(hold_args, utils_hold) != -1)
+	while (hold_args[i])
 	{
-		while (hold_args[i])
-		{
-			dup_envp = dup_array(utils_hold,
-					check_if_exists2(hold_args, utils_hold));
-			utils_hold->envp = dup_envp;
+		if (checkerror_identifier(hold_args[i]) == 1)
 			i++;
-		}
-	}
-	else
-	{
-		free_array(hold_args);
-		return (1);
+		dup_envp = dup_array(utils_hold,
+				check_if_exists2(hold_args, utils_hold));
+		utils_hold->envp = dup_envp;
+		i++;
 	}
 	free_array(hold_args);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: micarrel <micarrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 18:00:31 by micarrel          #+#    #+#             */
-/*   Updated: 2023/10/25 18:27:21 by micarrel         ###   ########.fr       */
+/*   Updated: 2023/11/02 17:41:36 by micarrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ char	*env_replace_utils(t_utils_hold *utils_hold, int i,
 		}
 		i++;
 	}
-	utils_hold->args[i] = '\0';
-	return (utils_hold->args);
+	return (utils_hold->args[i] = '\0', utils_hold->args);
 }
 
 char	*replace_env_vars(t_utils_hold *utils_hold)
@@ -48,6 +47,7 @@ char	*replace_env_vars(t_utils_hold *utils_hold)
 	int		i;
 	char	*var_name;
 	bool	in_quotes;
+	char	*tmp;
 
 	if (ft_strchr(utils_hold->args, '$') == NULL)
 		return (utils_hold->args);
@@ -56,5 +56,8 @@ char	*replace_env_vars(t_utils_hold *utils_hold)
 	in_quotes = false;
 	utils_hold->args = env_replace_utils(utils_hold, i,
 			in_quotes, var_name);
+	tmp = ft_strtrim(utils_hold->args, " ");
+	free(utils_hold->args);
+	utils_hold->args = tmp;
 	return (utils_hold->args);
 }

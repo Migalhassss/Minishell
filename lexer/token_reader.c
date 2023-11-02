@@ -105,20 +105,6 @@ int	check_pipes(t_utils_hold *utils_hold)
 	return (0);
 }
 
-
-void	print_lexer_list(t_lexer *lexer)
-{
-	t_lexer	*tmp;
-
-	tmp = lexer;
-	while (tmp)
-	{
-		printf("str = %s\n", tmp->str);
-		printf("type = %d\n", tmp->token);
-		tmp = tmp->next;
-	}
-}
-
 void	lexer_to_args(t_utils_hold *utils_hold)
 {
 	t_lexer	*tmp_lst;
@@ -138,31 +124,4 @@ void	lexer_to_args(t_utils_hold *utils_hold)
 	}
 	utils_hold->args = ft_strdup(tmp);
 	free(tmp);
-}
-
-int	only_spaces(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] != ' ')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int	token_reader(t_utils_hold *utils_hold)
-{
-	utils_hold->lexer_list = NULL;
-	if (ft_strlen(utils_hold->args) == 0 || only_spaces(utils_hold->args) == 1)
-		return (reset_utils_hold(utils_hold));
-	if (check_pipes(utils_hold) == 1)
-		return (1);
-	if (token_reader2(utils_hold) == 1)
-		return (1);
-	lexer_to_args(utils_hold);
-	return (0);
 }
